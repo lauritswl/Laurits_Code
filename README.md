@@ -9,3 +9,5 @@ Functions used through my work, that i save for later use
 ### GitBash
 Basic functions for using gitbash, and fixes for errors
 
+### Methods 3
+Assignment, CSV's and Markdowns used in methods 3

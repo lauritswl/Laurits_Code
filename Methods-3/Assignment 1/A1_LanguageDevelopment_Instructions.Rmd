@@ -1,9 +1,3 @@
----
-title: "Assignment 1 - Language development in autistic and neurotypical children"
-output: html_document
-date: "2022-08-15"
----
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -19,6 +13,15 @@ ii) the amount of unique words that each kid uses in each video. Same for the pa
 iii) the amount of morphemes per utterance (Mean Length of Utterance) displayed by each child in each video. Same for the parent. 
 
 This data is in the file you prepared in the previous class, but you can also find it here:https://www.dropbox.com/s/d6eerv6cl6eksf3/data_clean.csv?dl=0
+
+```{r}
+#Loading package
+pacman::p_load(tidyverse, dplyr, brms)
+
+#csv imported from assigment 0
+d <- read_csv("CleanedChild_Data.csv")
+
+```
 
 
 ## The structure of the assignment
@@ -81,9 +84,62 @@ Once the pipeline is in place, loop through different sample sizes to assess how
 BONUS questions for Part 1: what if the difference between ASD and TD was 0? how big of a sample size would you need? What about different effect sizes, and different error terms?
 
 ```{r}
+#Simulate data
+
+# predictor variable is visit, which is a discrete variable (and diagnosis) and outcome variable is MLU which is a continuous variable
+
+hist(rnorm(10000, 1.5, 0.5)) #autistic children at first visit
+
+hist(rnorm(10000, 1.5, 0.3)) #neurotypical children at first visit
+
+SimADS <- tibble(
+  Kid = seq(30),
+  Intercept = rnorm(30, 1.5, 0.5),
+  Slope = rnorm(30, 0.4, 0.4),
+  Diagnosis = "ASD"
+)
+  
+SimTD <- tibble(
+  Kid = seq(30),
+  Intercept = rnorm(30, 1.5, 0.3),
+  Slope = rnorm(30, 0.6, 0.2),
+  Diagnosis = "TD"
+)
+
+SimADS1 <- tibble(
+  expand_grid(Kid = seq(30),
+              Visit = seq(6))
+)
+
+SimTD1 <- tibble(
+  expand_grid(Kid = seq(30),
+              Visit = seq(6))
+)
+
+SimADS <- merge(SimADS,SimADS1)
+SimTD <- merge(SimTD, SimTD1)
+
+for (i in seq(nrow(SimADS))){
+  SimADS$MLU[i] <- rnorm(1, SimADS$Intercept[i] + SimADS$Slope[i] * (SimADS$Visit[i] - 1))
+}
+
+for (i in seq(nrow(SimTD))){
+  SimTD$MLU[i] <- rnorm(1, SimTD$Intercept[i] + SimTD$Slope[i] * (SimTD$Visit[i] - 1))
+}
+
+SimD <- full_join(SimADS, SimTD)
 
 ```
 
+```{r}
+#Plot data
+SimD %>%
+  ggplot(aes(x = Visit, y = MLU, color = Diagnosis, group = Kid)) + geom_point() + geom_line(alpha = 0.3)
+```
+
+```{r}
+#Bayesian workflow - making a model
+```
 
 
 # Part 2 - Strong in the Bayesian ken, you are now ready to analyse the actual data
@@ -118,4 +174,3 @@ Relying on the model(s) you trained in part 2 of the exercise, create prediction
 
 
 ```
-
