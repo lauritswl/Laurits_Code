@@ -1,0 +1,153 @@
+{
+  "main": {
+    "id": "aa698290c37e5895",
+    "type": "split",
+    "children": [
+      {
+        "id": "70fa841dde2dc33e",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "100 Days of Code/Day 1-10/Data Types.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      },
+      {
+        "id": "537c4bbdedf31dc7",
+        "type": "leaf",
+        "state": {
+          "type": "pdf",
+          "state": {
+            "file": "100 Days of Code/Python+Syntax+Cheat+Sheet+Booklet.pdf"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "19b53f413d185c5e",
+    "type": "split",
+    "children": [
+      {
+        "id": "366ee141fdaf70ba",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "48abf29337e2e412",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "fb6cb2c18922a5de",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "f(",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "d23c45e05c480b1a",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6b10c4882b01445d",
+    "type": "split",
+    "children": [
+      {
+        "id": "a78cbb9dd68fbfb3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3546aa9b64a9493b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "100 Days of Code/Day 1-10/Data Types.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "4aee6807dee26731",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "100 Days of Code/Day 1-10/Data Types.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a3d45b552db7c087",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "777fcbb2d480a54a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "100 Days of Code/Day 1-10/Data Types.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "fb6cb2c18922a5de",
+  "lastOpenFiles": [
+    "100 Days of Code/Day 1-10/Mathematical Operations.md",
+    "100 Days of Code/Day 1-10/Print and syntax.md",
+    "100 Days of Code/Day 1-10/Data Types.md",
+    "100 Days of Code/Python+Syntax+Cheat+Sheet+Booklet.pdf",
+    "100 Days of Code/Index.md",
+    "100 Days of Code/Day 1-10/Errors.md",
+    "100 Days of Code/Termonology.md",
+    "README.md"
+  ]
+}

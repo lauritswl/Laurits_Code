@@ -11,3 +11,6 @@ Basic functions for using gitbash, and fixes for errors
 
 ### Methods 3
 Assignment, CSV's and Markdowns used in methods 3
+
+### 100 Days of Code
+Im learning python through a online course, follow along :)
