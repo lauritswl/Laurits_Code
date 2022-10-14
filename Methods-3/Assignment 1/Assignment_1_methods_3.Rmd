@@ -1,0 +1,631 @@
+---
+title: "Assignment_1_methods_3"
+author: "Tilde Sloth"
+date: "10/12/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Assignment 1  - Language development in autistic and neurotypical children
+
+## Quick recap
+Autism Spectrum Disorder is often related to language impairment. However, this phenomenon has rarely been empirically traced in detail: i) relying on actual naturalistic language production, ii) over extended periods of time.
+
+We therefore videotaped circa 30 kids with ASD and circa 30 comparison kids (matched by linguistic performance at visit 1) for ca. 30 minutes of naturalistic interactions with a parent. We repeated the data collection 6 times per kid, with 4 months between each visit. We transcribed the data and counted: 
+i) the amount of words that each kid uses in each video. Same for the parent.
+ii) the amount of unique words that each kid uses in each video. Same for the parent.
+iii) the amount of morphemes per utterance (Mean Length of Utterance) displayed by each child in each video. Same for the parent. 
+
+This data is in the file you prepared in the previous class, but you can also find it here:https://www.dropbox.com/s/d6eerv6cl6eksf3/data_clean.csv?dl=0
+
+```{r}
+
+pacman::p_load(tidyverse, dplyr, brms, bayesplot, rstanarm)
+d <- read_csv("CleanedChild_Data.csv")
+
+```
+
+
+## The structure of the assignment
+We will be spending a few weeks with this assignment. In particular, we will:
+
+Part 1) simulate data in order to better understand the model we need to build, and to better understand how much data we would have to collect to run a meaningful study (precision analysis)
+
+Part 2) analyze our empirical data and interpret the inferential results
+
+Part 3) use your model to predict the linguistic trajectory of new children and assess the performance of the model based on that.
+
+As you work through these parts, you will have to produce a written document (separated from the code) answering the following questions:
+
+Q1 - Briefly describe your simulation process, its goals, and what you have learned from the simulation. Add at least a plot showcasing the results of the simulation. Make a special note on sample size considerations: how much data do you think you will need? what else could you do to increase the precision of your estimates?
+
+Q2 - Briefly describe the empirical data and how they compare to what you learned from the simulation (what can you learn from them?). Briefly describe your model(s) and model quality. Report the findings: how does development differ between autistic and neurotypical children (N.B. remember to report both population and individual level findings)? which additional factors should be included in the model? Add at least one plot showcasing your findings.
+
+Q3 - Given the model(s) from Q2, how well do they predict the data? Discuss both in terms of absolute error in training vs testing; and in terms of characterizing the new kids' language development as typical or in need of support.
+
+
+Below you can find more detailed instructions for each part of the assignment.
+
+## Part 1 - Simulating data
+
+Before we even think of analyzing the data, we should make sure we understand the problem, and we plan the analysis. To do so, we need to simulate data and analyze the simulated data (where we know the ground truth).
+
+In particular, let's imagine we have n autistic and n neurotypical children. We are simulating their average utterance length (Mean Length of Utterance or MLU) in terms of words, starting at Visit 1 and all the way to Visit 6.
+In other words, we need to define a few parameters:
+- average MLU for ASD (population mean) at Visit 1 and average individual deviation from that (population standard deviation)
+- average MLU for TD (population mean) at Visit 1 and average individual deviation from that (population standard deviation)
+- average change in MLU by visit for ASD (population mean) and average individual deviation from that (population standard deviation)
+- average change in MLU by visit for TD (population mean) and average individual deviation from that (population standard deviation)
+- an error term. Errors could be due to measurement, sampling, all sorts of noise. 
+
+Note that this makes a few assumptions: population means are exact values; change by visit is linear (the same between visit 1 and 2 as between visit 5 and 6). This is fine for the exercise. In real life research, you might want to vary the parameter values much more, relax those assumptions and assess how these things impact your inference.
+
+
+We go through the literature and we settle for some values for these parameters:
+- average MLU for ASD and TD: 1.5 (remember the populations are matched for linguistic ability at first visit)
+- average individual variability in initial MLU for ASD 0.5; for TD 0.3 (remember ASD tends to be more heterogeneous)
+- average change in MLU for ASD: 0.4; for TD 0.6 (ASD is supposed to develop less)
+- average individual variability in change for ASD 0.4; for TD 0.2 (remember ASD tends to be more heterogeneous)
+- error is identified as 0.2
+
+This would mean that on average the difference between ASD and TD participants is 0 at visit 1, 0.2 at visit 2, 0.4 at visit 3, 0.6 at visit 4, 0.8 at visit 5 and 1 at visit 6.
+
+With these values in mind, simulate data, plot the data (to check everything is alright); and set up an analysis pipeline.
+Remember the usual bayesian workflow:
+- define the formula
+- define the prior
+- prior predictive checks
+- fit the model
+- model quality checks: traceplots, divergences, rhat, effective samples
+- model quality checks: posterior predictive checks, prior-posterior update checks
+- model comparison
+
+Once the pipeline is in place, loop through different sample sizes to assess how much data you would need to collect. N.B. for inspiration on how to set this up, check the tutorials by Kurz that are linked in the syllabus.
+
+BONUS questions for Part 1: what if the difference between ASD and TD was 0? how big of a sample size would you need? What about different effect sizes, and different error terms?
+
+__Data simulation__
+```{r}
+#Simulation function
+simulation <- function(seed, n){
+#Defining the different parameters for the model
+    sigma_asd_intercept <- sqrt(log(0.5^2/1.5^2 + 1))  
+    sigma_td_intercept <- sqrt(log(0.3^2/1.5^2 + 1)) 
+    mu_asd_intercept <- log(1.5/exp(0.5*sigma_asd_intercept^2))
+    mu_td_intercept <- log(1.5/exp(0.5*sigma_td_intercept^2))
+    sigma_asd_slope <- sqrt(log(0.4^2/(1.5*0.4)^2 + 1))  
+    sigma_td_slope <- sqrt(log(0.2^2/(1.5*0.6)^2 + 1))  
+    mu_asd_slope <- log((1.5*0.4)/exp(0.5*sigma_asd_slope^2))
+    mu_td_slope <- log((1.5*0.6)/exp(0.5*sigma_td_slope^2))
+#Setting the seed
+set.seed(seed)
+#Converting it into a data frame
+parameters <- tibble(Diagnosis = rep(c("ASD", "TD"), each = ceiling(n/2))) %>% mutate(
+Condition = ifelse(Diagnosis == "ASD", 0, 1),
+Intercept = ifelse(Diagnosis == "ASD", 
+rlnorm(n, mu_asd_intercept, sigma_asd_intercept),
+rlnorm(n, mu_td_intercept, sigma_td_intercept)),
+Slope = ifelse(Diagnosis == "ASD",
+rlnorm(n, mu_asd_slope, sigma_asd_slope),
+rlnorm(n, mu_td_slope, sigma_td_slope)),
+Kid = seq(n))
+
+grid <- tibble(
+  expand_grid(Kid = seq(n),
+              Visit = seq(6))
+)
+
+df <- merge(parameters, grid)
+
+for (i in seq(nrow(df))){
+  df$MLU[i] <- rnorm(1, df$Intercept[i] + df$Slope[i] * (df$Visit[i] - 1))
+}
+return(df)
+}
+
+SimD <- simulation(123, 100)
+```
+
+__Plot data__
+```{r}
+SimD %>%
+  ggplot(aes(x = Visit, y = MLU, color = Diagnosis, group = Kid)) + geom_point() + geom_line(alpha = 0.3)
+```
+
+
+
+__Analysis pipeline__
+```{r}
+#define the formula
+
+MLUformula <- bf(MLU ~ 0 + Diagnosis + Diagnosis:Visit + (1+Visit|Kid))
+
+MLUformula_1 <- bf(MLU ~ 0 + Diagnosis + Diagnosis:Visit)
+
+```
+
+```{r}
+#define the prior
+get_prior(MLUformula,
+          data = SimD, 
+          family = gaussian)
+          
+get_prior(MLUformula_1,
+          data = SimD,
+          family = gaussian)
+
+
+
+MLU_prior <- c(
+  prior(normal(0, 0.2), class = b),
+  prior(normal(0.2, 0.1), class = b, coef = "DiagnosisASD"),
+  prior(normal(0.2, 0.1), class = b, coef = "DiagnosisTD"),
+  prior(normal(0.3, 0.1), class = sd, coef = Intercept, group = Kid),
+  prior(normal(0.1, 0.15), class = sd, coef = Visit, group = Kid))
+  
+MLU_prior_1 <- c(
+  prior(normal(0, 0.2), class = b),
+  prior(normal(0.2, 0.1), class = b, coef = "DiagnosisASD"),
+  prior(normal(0.2, 0.1), class = b, coef = "DiagnosisTD"))
+
+```
+___
+We set the priors based of the information given in the description. We choose to make similar priors for the two groups ASD and TD, since we want the data to work hard to prove a difference. In that way the priors are quite uninformed but they still make sure that we don't expect extreme outliers. 
+___
+
+
+```{r}
+#prior predictive checks
+MLU_model_prior <- 
+  brm(
+    MLUformula,
+    data = SimD,
+    save_pars = save_pars(all = TRUE),
+    family = gaussian,
+    prior = MLU_prior,
+    file = "MLU_model_prior",
+    #refit = "on_change",
+    sample_prior = "only",
+    iter = 5000, 
+    warmup = 1000,
+    cores = 2,
+    chains = 2,
+    backend = "cmdstanr",
+    threads = threading(2),
+    control = list(
+      adapt_delta = 0.999,
+      max_treedepth = 20))
+      
+pp_check(MLU_model_prior, ndraws=100)
+
+MLU_model_prior_1 <- 
+  brm(
+    MLUformula_1,
+    data = SimD,
+    save_pars = save_pars(all = TRUE),
+    family = gaussian,
+    prior = MLU_prior_1,
+    file = "MLU_model_prior_1",
+    #refit = "on_change",
+    sample_prior = "only",
+    iter = 5000, 
+    warmup = 1000,
+    cores = 2,
+    chains = 2,
+    backend = "cmdstanr",
+    threads = threading(2),
+    control = list(
+      adapt_delta = 0.999,
+      max_treedepth = 20))
+      
+pp_check(MLU_model_prior_1, ndraws=100)
+```
+
+```{r}
+#fit the model
+MLU_model <- 
+  brm(
+    MLUformula,
+    data = SimD,
+    save_pars = save_pars(all = TRUE),
+    family = gaussian,
+    prior = MLU_prior,
+    file = "MLU_model",
+    #refit = "on_change",
+    sample_prior = T,
+    iter = 5000, 
+    warmup = 1000,
+    cores = 2,
+    chains = 2,
+    backend = "cmdstanr",
+    threads = threading(2),
+    control = list(
+      adapt_delta = 0.999,
+      max_treedepth = 20))
+      
+MLU_model_1 <- 
+  brm(
+    MLUformula_1,
+    data = SimD,
+    save_pars = save_pars(all = TRUE),
+    family = gaussian,
+    prior = MLU_prior_1,
+    file = "MLU_model_1",
+    #refit = "on_change",
+    sample_prior = T,
+    iter = 5000, 
+    warmup = 1000,
+    cores = 2,
+    chains = 2,
+    backend = "cmdstanr",
+    threads = threading(2),
+    control = list(
+      adapt_delta = 0.999,
+      max_treedepth = 20))
+```
+
+__Model comparison__
+```{r}
+#model quality checks: posterior predictive checks, prior-posterior update checks
+pp_check(MLU_model, ndraws=100)
+pp_check(MLU_model_1, ndraws=100)
+```
+___
+From the plot we can infer that MLU_model has the best performance
+___
+
+```{r, fig.width=4,fig.height=5}
+#k-fold cross validation for the two models
+kfold_m1 <- kfold (MLU_model, folds = "stratified", group = "Diagnosis", K = 5, save_fits = TRUE, cores = 4)
+kfold_m2 <- kfold (MLU_model_1, folds = "stratified", group = "Diagnosis", K = 5, save_fits = TRUE, cores = 4)
+
+#Defining estimator RMSE
+rmse <- function(y, yrep){
+  yrep_mean <- colMeans(yrep)
+  sqrt(mean((yrep_mean-y)^2)) 
+}
+
+#Split into y and yrep
+kfold_pred_m1 <- kfold_predict(kfold_m1)
+kfold_pred_m2 <- kfold_predict(kfold_m2)
+
+#Computing the RMSE of the difference between the observed responses (y), and the kfold predicted responses (yrep) 
+RMSE_m1 <- rmse(kfold_pred_m1$y, kfold_pred_m1$yrep)
+RMSE_m2 <- rmse(kfold_pred_m2$y, kfold_pred_m2$yrep)
+
+#Making a data frame containing the two cross-validations
+RMSE_df <- tribble(~Model, ~Type, ~RMSE,
+            "Model 1", "Cross-validation", RMSE_m1,
+            "Model 2", "Cross-validation", RMSE_m2)
+#Plotting it
+RMSE_df %>% 
+  ggplot(aes(y = RMSE, x = Type, color = Model))+
+  geom_point() + theme_minimal()
+```
+
+
+__POWER ANALYSIS__
+```{r}
+#n_sim <- 100
+#s <- tibble(seed = 1:n_sim) %>%
+ #   mutate(d = map(seed, simulation, n = 50)) %>%
+  #  mutate(fit = map2(d, seed, ~update(MLU_model, newdata = .x, seed = .y)))
+
+#head(s)
+```
+
+```{r}
+
+#parameters <-
+ #   s %>%
+  #      mutate(DiagnosisTD = map(fit, ~ fixef(.) %>%
+   #     data.frame() %>%
+    #    rownames_to_column("parameter"))) %>%
+    #unnest(DiagnosisTD)
+        
+#parameters %>%
+ #   select(-d, -fit) %>%
+  #  filter(parameter == "DiagnosisTD") %>%
+   # head()
+    
+#parameters %>%
+ #   filter(parameter == "DiagnosisTD") %>%
+  #  ggplot(aes(x = seed, y = Estimate, ymin = Q2.5, ymax = Q97.5)) +
+   # geom_hline(yintercept=c(0,.5), color = "white") +
+    #geom_pointrange(fatten = 1/2) +
+    #labs(x = "seed (i.e., simulation index)",
+    #y = expression(beta[1]))
+    
+    
+#parameters %>%
+ #   filter(parameter == "DiagnosisTD") %>%
+  #  mutate(check = ifelse(Q2.5 > 0, 1, 0)) %>%
+   # summarise(power = mean(check))
+```
+___
+A good power value is 0.8 or above. With n = 100 the power of MLU_model is only 0.62. This could imply that our model has a hard time finding a difference between the two groups even when we run the simulation 100 times. A rule of thumb is, that you should often be able to observe the difference when n = 30. However, since our priors are so conservative, it could also be that they overrule the data
+___
+
+# Part 2 - Strong in the Bayesian ken, you are now ready to analyse the actual data
+
+**2.1)**
+- Describe your sample (n, age, gender, clinical and cognitive features of the two groups) and critically assess whether the groups (ASD and TD) are balanced. Briefly discuss whether the data is enough given the simulations in part 1.
+
+```{r}
+"### Participant information ###"
+# paste n() unique participants
+paste('Children participating:', length(unique(d$Child.ID))) 
+
+#Splitting dataframes into ASD and TD:
+ASD_D <- d %>% filter(Diagnosis == "ASD" ) %>%  filter(Visit == 1)
+TD_D <- d %>% filter(Diagnosis == "TD" ) %>% filter(Visit == 1)
+
+
+
+#n() unique participants of both groups
+paste("Of the 61 participants,",length(unique(ASD_D$Child.ID)),"participants have ASD, and",length(unique(TD_D$Child.ID)),"participants is typically developing") 
+
+"### Gender ### "
+options(dplyr.summarise.inform = FALSE)
+gender<- d %>% group_by(Diagnosis,Gender) %>% filter(Visit==1) %>% summarize(n())
+paste("Of the 29 ASD participants",gender[1,3], "participants are female and",gender[2,3],"are male")
+paste("Of the 32 TD participants",gender[3,3], "participants are female and",gender[4,3],"are male")
+
+"### Age ### "
+# mean age and standard deviation of ASD Children
+paste("The mean age (in months) of the ASD Children is",round(mean(ASD_D$Age,na.rm = T),digits = 2),"with a standard deviation of",round(sd(ASD_D$Age,na.rm = T),2))
+# mean age and standard deviation of TD Children
+paste("The mean age (in months) of the TD Children is",round(mean(TD_D$Age,na.rm = T),digits = 2),"with a standard deviation of",round(sd(TD_D$Age,na.rm = T),2))
+
+"### Non_Verbal IQ ### "
+# mean nonverbal IQ and standard deviation of ASD Children
+paste("The mean non-verbal IQ of the ASD Children is",round(mean(ASD_D$NonVerbalIQ,na.rm = T),digits = 2),"with a standard deviation of",round(sd(ASD_D$NonVerbalIQ,na.rm = T),2))
+# mean nonverbal IQ and standard deviation of TD Children
+paste("The mean non-verbal IQ of the TD Children is",round(mean(TD_D$NonVerbalIQ,na.rm = T),digits = 2),"with a standard deviation of",round(sd(TD_D$NonVerbalIQ,na.rm = T),2))
+"### Verbal IQ ### "
+# mean verbal IQ and standard deviation of ASD Children
+paste("The mean verbal IQ of the ASD Children is",round(mean(ASD_D$VerbalIQ,na.rm = T),digits = 2),"with a standard deviation of",round(sd(ASD_D$VerbalIQ,na.rm = T),2))
+# mean verbal IQ and standard deviation of TD Children
+paste("The mean verbal IQ of the TD Children is",round(mean(TD_D$VerbalIQ,na.rm = T),digits = 2),"with a standard deviation of",round(sd(TD_D$VerbalIQ,na.rm = T),2))
+
+rm(ASD_D, TD_D)
+```
+
+
+___
+Generally the sample is very balanced across the different parameters. ASD children differ from TD children with slightly higher standard deviations (around +2) in age, non-verbal IQ and verbal indicating a larger spread in variables for ASD compared to TD. Most prominently, the mean age of ASD is rather larger than age of TD.
+___
+
+**2.2)**
+- Describe linguistic development (in terms of MLU over time) in TD and ASD children (as a function of group). Discuss the difference (if any) between the two groups.
+```{r}
+# as model performed the best on the simulation we are going to use that on the real data to model the interaction between Diagnosis and Time/Visit
+
+d_22 <- d %>% 
+  select(Child.ID, CHI_MLU, Visit, Diagnosis) %>% 
+  rename(
+    Kid = Child.ID,
+    MLU = CHI_MLU
+  )
+
+MLU_model_real_22 <- 
+  brm(
+    MLUformula,
+    data = d_22,
+    save_pars = save_pars(all = TRUE),
+    family = gaussian,
+    prior = MLU_prior,
+    file = "MLU_model_real_22",
+    #refit = "on_change",
+    sample_prior = T,
+    iter = 5000, 
+    warmup = 1000,
+    cores = 2,
+    chains = 2,
+    backend = "cmdstanr",
+    threads = threading(2),
+    control = list(
+      adapt_delta = 0.999,
+      max_treedepth = 20))
+```
+
+```{r}
+summary(MLU_model_real_22) #Summary for the best simulation formula made on the real data
+
+# Plotting the MLU development for all children over time
+d %>%
+  ggplot(aes(x = Visit, y = CHI_MLU, color = Diagnosis, group = Child.ID)) + geom_point() + geom_line(alpha = 0.3) +
+  theme_bw() + 
+  ggtitle("2.2 Plot 1: MLU development for all children over time")
+  
+# Plotting the mean MLU development for both groups of children over time
+d %>% group_by(Diagnosis, Visit) %>% summarise(mean_mlu_inc = mean(CHI_MLU) ) %>% 
+  ggplot(aes(x = Visit, y = mean_mlu_inc, color = Diagnosis)) + geom_point() + geom_line(alpha = 0.3) +
+  theme_bw() + 
+  ggtitle("2.2 Plot 2: Mean MLU development for all children over all 6 visits")
+
+
+mcmc_intervals(MLU_model_real_22, pars = c("b_DiagnosisASD:Visit", "b_DiagnosisTD:Visit"))
+
+```
+___
+*Differences between lingustic development of MLU between ASD and TD over time*
+
+The model summary shows that the increase in MLU is generally less over time (per visit) in ASD children compared to TD children. In ASD children the MLU increases by 0.16 per visit while in TD children MLU increases 0.40 per visit.
+
+This tendency is also reflected in plot 1 of the original data where MLU development over time generally steadily increases for TD children from visit 1 to 6. However, the MLU development in ASD children is a lot more varied. Here there is some children having larger decrements in MLU throughout the visits. Furthermore, other ASD children exhibit a very high baseline MLU at visit 1 and some have big increments towards higher MLU than TD children.
+
+One could then suspect the variance of the diagnosisASD:Visit estimates to be larger than that of the TD children. If one looks at the mcmc_plot, this difference is true, but still the difference is not too critical. We can also rule out that this is due to differences in priors of MLU as they are kept the same for each group of children.
+
+Taking a look at plot 2 there is 2 different general trajectories for each group of children where ASD children has a lower has a lower increase in MLU pr Visit but also their development stagnates already at visit 3 compared to visit 5 for TD children. It is important to note the inconsistency of ASD children MLU development trajectories as previously mentioned making plot 2 ASD mean trajectory less reliable due to individual 
+___
+  
+
+**2.3)**
+- Describe individual differences in linguistic development: do all kids follow the same path? Are all kids reflected by td for their group?
+```{r}
+p <- c(0.25, 0.5, 0.75) # set quantiles lower, median, upper
+
+p_names <- map_chr(p, ~paste0(.x*100, "%")) # saving the names for coloumns
+
+p_funs <- map(p, ~partial(quantile, probs = .x, na.rm = TRUE)) %>% 
+  set_names(nm = p_names) # 
+
+# creating a df with quantiles where lower is 20% - mid is 50% - upper is 80%
+d_22_quantiles <- d_22 %>% 
+  group_by(Diagnosis, Visit) %>% 
+  summarize_at(vars(MLU), funs(!!!p_funs)) %>% 
+  rename(
+    lower = 3,
+    mid = 4,
+    upper = 5
+  ) 
+
+
+d_22_w_quantiles <- left_join(d_22, d_22_quantiles) # joining the summarised quantiles with children id's
+```
+
+
+```{r}
+
+d_22_w_quantiles <- d_22_w_quantiles %>% 
+  mutate(
+         group_intercept=
+    case_when( # creating a new column with low, mid and upper intercept for each MLU at visit 1 conditioned by quantiles
+    (Visit==1) & (MLU < lower) ~ "low_intercept",
+    (Visit==1) & (lower <= MLU) & (MLU <= upper) ~ "mid_intercept",
+    (Visit==1) & (upper < MLU)  ~ "upper_intercept",
+  ) ) %>% group_by(Kid) %>% 
+    mutate(group_intercept= first(na.omit(group_intercept))) # taking the group_intercept for visit 1 and duplicating for each child
+```
+
+```{r}
+d_22_w_quantiles %>% filter(Diagnosis=="ASD") %>% 
+  ggplot(aes(x = Visit, y = MLU, color = group_intercept, group = Kid)) + geom_point() + geom_line(alpha = 0.3) +
+  theme_bw() + 
+  ggtitle("2.3 Plot 1: ASD children MLU development grouped by whether MLU at visit 1 is
+          below 25th percentile, above 75th percentile or inbetween these")
+
+d_22_w_quantiles %>% filter(Diagnosis=="TD") %>% 
+  ggplot(aes(x = Visit, y = MLU, color = group_intercept, group = Kid)) + geom_point() + geom_line(alpha = 0.3) +
+  theme_bw() + 
+  ggtitle("2.3 Plot 2: TD children MLU development grouped by whether MLU at visit 1 is
+          below 25th percentile, above 75th percentile or inbetween these")
+```
+___
+All the kids follow a general trend of increasing their mean length of utterance pr visit. Their linguistic development is therefore a positive one with some variablity per visit. The ASD kids generally have a slower increase of linguistic development than TD kids.
+There are a few outliers in the ASD group, as the variance in their visit effect has a greater SD (which we can see in plot 2.3 1). This means that even though the ASD kids generally still increase their linguistic abilities, the ASD kids may be more prone to be affected by day-to-day variations such as stimulation and mood. An ASD kid may therefore become non-verbal during a single visit, and then return to their predictied linguistic abilities.
+
+Some of the ASD kids also have a higher linguistic baseline compared to TD kids. However, these kids are outliers. 
+
+___
+**2.4)**
+- Include additional predictors in your model of language development (N.B. not other indexes of child language: types and tokens, that'd be cheating). Identify the best model, by conceptual reasoning, model comparison or a mix. Report the model you choose (and name its competitors, if any) and discuss why it's the best model.
+
+
+```{r}
+MLUformula_real_data <- bf(CHI_MLU ~ Diagnosis + Visit + Age)
+
+MLU_model_real_datax <- 
+  brm(
+    MLUformula_real_data,
+    data = d,
+    save_pars = save_pars(all = TRUE),
+    family = gaussian,
+    file = "MLU_model_real_dataxx",
+    #refit = "on_change",
+    sample_prior = T,
+    iter = 5000, 
+    warmup = 1000,
+    cores = 8,
+    chains = 2,
+    backend = "cmdstanr",
+    threads = threading(2),
+    control = list(
+      adapt_delta = 0.999,
+      max_treedepth = 20))
+
+MLUformula_real_data_1 <- bf(CHI_MLU ~ Diagnosis + Visit + Age + Socialization)
+
+MLU_model_real_data_1x <- 
+  brm(
+    MLUformula_real_data_1,
+    data = d,
+    save_pars = save_pars(all = TRUE),
+    family = gaussian,
+    file = "MLU_model_real_data_1x",
+    #refit = "on_change",
+    sample_prior = T,
+    iter = 5000, 
+    warmup = 1000,
+    cores = 8,
+    chains = 2,
+    backend = "cmdstanr",
+    threads = threading(2),
+    control = list(
+      adapt_delta = 0.999,
+      max_treedepth = 20))
+
+loo1 <- loo(MLU_model_real_datax)
+loo2 <- loo(MLU_model_real_data_1x)
+
+comp <- loo_compare(loo1, loo2)
+
+print(comp, simplify = FALSE, digits = 3)
+
+```
+
+```{r, fig.width=4,fig.height=5}
+
+#k-fold cross validation for the two models
+kfold_real_m1 <- kfold (MLU_model_real_datax, folds = "stratified", group = "Diagnosis", K = 5, save_fits = TRUE, cores = 4)
+
+kfold_real_m2 <- kfold (MLU_model_real_data_1x, folds = "stratified", group = "Diagnosis", K = 5, save_fits = TRUE, cores = 4)
+
+#Defining estimator RMSE
+rmse <- function(y, yrep){
+  yrep_mean <- colMeans(yrep)
+  sqrt(mean((yrep_mean-y)^2)) 
+}
+
+#Split into y and yrep
+#Kfold
+kfold_pred_real_m1 <- kfold_predict(kfold_real_m1)
+kfold_pred_real_m2 <- kfold_predict(kfold_real_m2)
+
+#Computing the RMSE of the difference between the observed responses (y), and the kfold predicted responses (yrep) 
+RMSE_real_kfold_m1 <- rmse(kfold_pred_real_m1$y, kfold_pred_real_m1$yrep)
+RMSE_real_kfold_m2 <- rmse(kfold_pred_real_m2$y, kfold_pred_real_m2$yrep)
+
+#Making a data frame containing the two cross-validations
+RMSE_real_df <- tribble(~Model, ~Type, ~RMSE,
+            "Model 1 (Empirical Data)", "Cross-validation", RMSE_real_kfold_m1,
+            "Model 2 (Empirical Data)", "Cross-validation", RMSE_real_kfold_m2)
+#Plotting it
+RMSE_real_df %>% 
+  ggplot(aes(y = RMSE, x = Type, color = Model))+
+  geom_point() + theme_minimal()
+```
+
+___
+**Comparison analysis**
+We have chosen to compare two models with additional predictors: A model using age and ethnicity and a model using age and socialization
+
+**Theoretical comparison:**
+The theory regarding language accustition doesn't dictate that ethnicity should change ability to accuire language.
+On the other hand children have multiple inputs of language and learns from other individuals than the mother aswell. 
+The child's socialization in secondary settings should have an effect on the childs word accusition.
+
+A model including socialization as a predictor should therefore be better at predicting MLU pr visit than ethnicity.
+
+**Leave one out comparison**
+Using the loo() and loo_compare() function the socialization model turns out to have a greater ELDP as the theory would predict.
+*The model utilizing socialization therefore seems to be the best model based on model comparison and conceptual reasoning.*
+___
+
+
