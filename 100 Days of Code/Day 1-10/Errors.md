@@ -13,6 +13,11 @@ print("Hello world!")
 #Indentation error
  print("Hello world!")
 
+#other error:
+if condition:
+	do this
+else:
+	do this
 ```
 
 ## Type Error
@@ -22,4 +27,18 @@ Can be provoked by using an interger in a len() function:
 len(3456) #Result: Type error
 	#If we format the number as a **string** the function will work:
 len("3456") #Result: 4
+```
+
+## Index Error
+An **IndexError** appears when working with lists. 
+
+e.g.: **IndexError: list index out of range**
+``` python
+# Error
+fruits = ["Apple", "Pear", "Orange"]
+fruits[len(fruits)]
+fruits[3]
+#IndexError: list index out of range
+fruits[len(fruits)-1] #Orange
+fruits[2] #Orange
 ```

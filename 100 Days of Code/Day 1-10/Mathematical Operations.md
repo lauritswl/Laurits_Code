@@ -42,3 +42,13 @@ print(int(8/3)) #prints: 2
 #So use round, that uses syntax round(number_to_round,decimal_places)
 print(round(8/3),2)
 #prints: 2.67  
+```
+
+## Comparison Operators
+A list of comparison operators
+x > y #x is greater than y
+x < y #x is less than y
+x >= y #x is greater or equal to y
+x <= y #x is less or equal to y
+x == y #x is equal to y
+x != y #x is not equal to y

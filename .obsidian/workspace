@@ -4,24 +4,14 @@
     "type": "split",
     "children": [
       {
-        "id": "70fa841dde2dc33e",
+        "id": "d65bb3caadaec79d",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "100 Days of Code/Day 1-10/Data Types.md",
+            "file": "100 Days of Code/Day 1-10/Loop.md",
             "mode": "source",
             "source": false
-          }
-        }
-      },
-      {
-        "id": "537c4bbdedf31dc7",
-        "type": "leaf",
-        "state": {
-          "type": "pdf",
-          "state": {
-            "file": "100 Days of Code/Python+Syntax+Cheat+Sheet+Booklet.pdf"
           }
         }
       }
@@ -50,7 +40,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "f(",
+                "query": "loop",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -88,7 +78,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "100 Days of Code/Day 1-10/Data Types.md",
+                "file": "100 Days of Code/Day 1-10/Loop.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +95,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "100 Days of Code/Day 1-10/Data Types.md",
+                "file": "100 Days of Code/Day 1-10/Loop.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -128,7 +118,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "100 Days of Code/Day 1-10/Data Types.md"
+                "file": "100 Days of Code/Day 1-10/Loop.md"
               }
             }
           }
@@ -139,15 +129,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "fb6cb2c18922a5de",
+  "active": "d65bb3caadaec79d",
   "lastOpenFiles": [
-    "100 Days of Code/Day 1-10/Mathematical Operations.md",
-    "100 Days of Code/Day 1-10/Print and syntax.md",
-    "100 Days of Code/Day 1-10/Data Types.md",
-    "100 Days of Code/Python+Syntax+Cheat+Sheet+Booklet.pdf",
     "100 Days of Code/Index.md",
     "100 Days of Code/Day 1-10/Errors.md",
-    "100 Days of Code/Termonology.md",
-    "README.md"
+    "100 Days of Code/Day 1-10/Loop.md",
+    "100 Days of Code/Day 1-10/Logical Operators.md",
+    "100 Days of Code/Day 1-10/List.md",
+    "100 Days of Code/Day 1-10/Random Module.md",
+    "100 Days of Code/Day 1-10/Modules.md",
+    "100 Days of Code/Day 1-10/Print and syntax.md",
+    "100 Days of Code/Used functions.md",
+    "100 Days of Code/Python+Syntax+Cheat+Sheet+Booklet.pdf"
   ]
 }

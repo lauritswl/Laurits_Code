@@ -1,0 +1,45 @@
+---
+title: "Mousetracking analysis"
+author: "Laurits Lyngbæk"
+date: "2022-10-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Read packages
+```{r}
+pacman::p_load(mousetrap,readbulk)
+```
+#As mouse trap object
+```{r}
+df <- read_opensesame(directory = ".", extension = ".csv") #Load all files in folder with .csv ending
+mt<- mt_import_mousetrap(df) #tranform df to mousetrap object
+rm(df)
+```
+
+#Mousetrack plot
+```{r}
+#specified
+mt_plot(data = mt, use = 'trajectories')
+```
+## Reshape!!!!
+
+```{r}
+# Time-normalize trajectories
+mt <- mt_time_normalize(mt)
+mt_left <- mt_remap_symmetric(mt)
+mt_plot(mt_left, color = 'Stimulus')
+mt_flip <- mt_remap_symmetric(mt,
+  remap_xpos="no", remap_ypos="up")
+mt_plot(mt_flip, color = 'Stimulus')
+```
+```{r}
+mt_a_sub <- mt_aggregate_per_subject()
+```
+
+
+
+
