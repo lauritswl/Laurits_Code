@@ -1,0 +1,204 @@
+{
+  "main": {
+    "id": "aa698290c37e5895",
+    "type": "split",
+    "children": [
+      {
+        "id": "6f58d75b98cae046",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d65bb3caadaec79d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "100 Days of Code/Day 1-10/List.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "966b128a1f150568",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "100 Days of Code/00 Index.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "0147fbd59e47ab21",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "100 Days of Code/Day 1-10/Dictionary.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "e2f2b532c6f22475",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "100 Days of Code/Day 1-10/Functions with outputs.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "01eee0d78d10fbd8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Docstrings.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "19b53f413d185c5e",
+    "type": "split",
+    "children": [
+      {
+        "id": "366ee141fdaf70ba",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "48abf29337e2e412",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "fb6cb2c18922a5de",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "d23c45e05c480b1a",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6b10c4882b01445d",
+    "type": "split",
+    "children": [
+      {
+        "id": "a78cbb9dd68fbfb3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3546aa9b64a9493b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "100 Days of Code/00 Index.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "4aee6807dee26731",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "100 Days of Code/00 Index.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a3d45b552db7c087",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "777fcbb2d480a54a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "100 Days of Code/00 Index.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "ribbon": {
+    "mostRecentAction": ""
+  },
+  "active": "48abf29337e2e412",
+  "lastOpenFiles": [
+    "100 Days of Code/Day 1-10/Dictionary.md",
+    "100 Days of Code/Day 1-10/Functions with outputs.md",
+    "100 Days of Code/00 Index.md",
+    "Docstrings.md",
+    "100 Days of Code/Day 1-10/List.md",
+    "100 Days of Code/Day 1-10/Conditional Statements.md",
+    "100 Days of Code/Day 1-10/Modules.md",
+    "100 Days of Code/Day 1-10/Errors.md",
+    "100 Days of Code/Day 1-10/Functions with inputs.md",
+    "100 Days of Code/Day 1-10/Defining a function.md"
+  ]
+}

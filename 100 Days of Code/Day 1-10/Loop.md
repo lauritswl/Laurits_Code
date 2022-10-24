@@ -20,3 +20,22 @@ for number in range(a,b):
 	print(number)
 	#prints: a, a+1,a+2,...,b 
 ```
+## While loop:
+A `while loop`is a loop that continues while a condition is true.
+
+``` python
+while something_is_true:
+    #Do something repeadetly
+    #And do this repeadetly
+```
+
+## Infinite loop
+``` python
+while 3>5:
+	# do something
+```
+
+
+
+
+

@@ -42,3 +42,6 @@ fruits[3]
 fruits[len(fruits)-1] #Orange
 fruits[2] #Orange
 ```
+
+## Key Error
+- [ ] An **KeyError** appers when a key is written incorrectly in a [[Dictionary#Key vs Value:|dictionary]].

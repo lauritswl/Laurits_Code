@@ -11,8 +11,6 @@ list = [item1, item2, ..., item_n]
 An [[Errors#Index Error|Index Error]] can appear when working with lists.
 
 ## Nested Lists
-
-
 ``` python
 fruits = ["Apple", "Pear", "Orange"]
 vegetables = ["Carrot", "Potato", "Celery"]
