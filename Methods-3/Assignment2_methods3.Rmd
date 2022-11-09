@@ -1,0 +1,359 @@
+---
+title: "Assignment2_methods3"
+author: "Tilde Sloth"
+date: "11/3/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Assignment 2: meta-analysis
+
+## Questions to be answered
+
+1. Simulate data to setup the analysis and gain insight on the structure of the problem. Simulate one dataset of 100 studies (n of participants should follow a normal distribution with mean of 20, sd of 10, but no fewer than 10 participants), with a mean effect size of 0.4, average deviation by study of .4 and measurement error of .8. The data you get should have one row per study, with an effect size mean and standard error. Build a proper bayesian model to analyze the simulated data. Then simulate publication bias (only some of the studies you simulate are likely to be published, which?), the effect of publication bias on your estimates (re-run the model on published studies, assess the difference), and discuss what this implies for your model. remember to use at least one plot to visualize your results. 
+BONUS question: do a power/precision analysis: w this kind of sample sizes (participants) how many studies would you need to acquire good precision (e.g. .1 sd in the pop level estimate)
+
+
+# Question 1:  Simulate data to setup the analysis and gain insight on the structure of the problem.
+```{r}
+#Installing packages and setting seed for repreoducability
+pacman::p_load(tidyverse, brms, bayesplot, rstanarm, msm, cmdstanr, gridExtra)
+set.seed(123)
+#parameter identification
+EffectMean <- 0.4
+StudySD <- 0.4
+Error <- 0.8
+#specifying number of studies
+Studies <- 100
+n_participants <- 20
+n_participants_sd <- 10
+min_participants <- 10
+
+#simulating 100 studies
+d <- tibble(
+  Study = seq(Studies),
+  Participants = round(msm::rtnorm(Studies, n_participants, n_participants_sd, lower = min_participants), 0),
+  StudyEffect = NA,
+  EffectMu = NA,
+  EffectError = NA
+)
+
+#simulating parameters for each study
+for (i in seq(Studies)){
+  d$StudyEffect[i] <- rnorm(1, EffectMean, StudySD)
+  sampling <- rnorm(d$Participants[i], d$StudyEffect[i], Error)
+  d$EffectMu[i] <- mean(sampling)
+  d$EffectError[i] <- sd(sampling)/sqrt(d$Participants[i])
+}
+
+#setting priors
+ma_p0 <- c(
+  prior(normal(0, 0.3), class = Intercept),
+  prior(normal(0, 0.3), class = sd))
+
+ma_p1 <- c(
+  prior(normal(0, 0.3), class = Intercept),
+  prior(normal(0, 0.3), class = sd))
+
+#setting models
+ma_f0 <- bf(EffectMu | se(EffectError) ~ 1 + (1|Study))
+
+
+#getting priors for the models
+#priors for ma_f0
+get_prior(ma_f0,
+          data = d, 
+          family = gaussian)
+```
+    
+
+Running STANbrm
+```{r}
+#running the models
+ma_m0_prior <- brm(
+  ma_f0,
+  data = d,
+  family = gaussian,
+  prior = ma_p0,
+  sample_prior = "only",
+  backend = "cmdstanr",
+  threads = threading(2),
+  chains = 2,
+  cores = 4,
+  control = list(
+    adapt_delta = 0.9,
+    max_treedepth = 20))
+
+```
+
+```{r}
+#symmetric prior bias 
+pp_check(
+  ma_m0_prior, ndraws = 100)
+
+
+#including publication bias
+d1 <- d %>% mutate(
+  Published = NA,
+  PublishedPos = NA)
+
+#loops through all the studies
+for (i in seq(Studies)){
+  #checks if the absolute value of the specific study's effectMU minus two standard
+    #deviations is above 0. If it is there is a 95% chance that the study is published, if not       only a 5% chance of being published.
+  d1$Published[i] <- ifelse(
+    abs(d$EffectMu[i]) - (2*d$EffectError[i]) > 0,
+    rbinom(1, 1, .9), rbinom(1, 1, .1))
+  d1$PublishedPos[i] <- ifelse(
+    #does the same as the above ifelse function but the study's effectMU also has to be             #positive. 
+      abs(d$EffectMu[i]) - (2*d$EffectError[i]) > 0 & d$EffectMu[i] > 0,
+    rbinom(1, 1, .9), rbinom(1, 1, .1))
+  }
+
+  
+#updating the models
+ma_m0_all <- brm(
+  ma_f0,
+  data = d1,
+  save_pars = save_pars(all = T),
+  family = gaussian,
+  prior = ma_p0,
+  sample_prior = T,
+  backend = "cmdstanr",
+  threads = threading(2),
+  chains = 2,
+  cores = 4,
+  control = list(
+    adapt_delta = 0.9,
+    max_treedepth = 20
+  ))
+
+ma_m0_pub <- update(
+  ma_m0_all, newdata = subset(d1, Published == 1))
+
+ma_m0_pubpos <- update(
+  ma_m0_all, newdata = subset(d1, PublishedPos == 1))
+```
+
+PPChecks:
+
+```{r}
+#pp checks of all the models
+#all studies 
+pp_check(
+  ma_m0_all, ndraws = 100)
+```
+
+
+```{r}
+#symmetric pubplication bias 
+pp_check(
+  ma_m0_pub, ndraws = 100)
+```
+
+
+```{r}
+#symmetric positive pubblication bias 
+pp_check(
+  ma_m0_pubpos, ndraws = 100)
+
+```
+__Visualization__
+```{r}
+posterior_prior <- as_draws_df(ma_m0_all)
+posterior_pub <- as_draws_df(ma_m0_pub)
+posterior_pubpos <- as_draws_df(ma_m0_pubpos)
+
+p1 <- ggplot(posterior_prior) + geom_histogram(aes(b_Intercept), fill = "red", color = "red", alpha = 0.3, bins = 50) + xlab("Prior-posterior") + xlim(0,0.8)
+
+p2 <- ggplot(posterior_pub) + geom_histogram(aes(b_Intercept), fill = "yellow", color = "yellow", alpha = 0.3, bins = 50) + xlab("Posterior with publication bias")+ xlim(0,0.8)
+
+p3 <- ggplot(posterior_pubpos) + geom_histogram(aes(b_Intercept), fill = "green", color = "green", alpha = 0.3, bins = 50)+ xlab("Posterior with positive publication bias")+ xlim(0,0.8)
+
+gridExtra::grid.arrange(p1, p2, p3)
+```
+
+---
+The plot shows that including a publication bias or a positive publication bias predicts a very different estimate of the effect size. The models affected by a publication bias expect a higher effect size than the model not affected by the publication bias. Because of this, we could expect that a meta analysis would not represent the true population level and therefore we should always consider a possible publication bias.
+---
+
+## Question 2
+2. What is the current evidence for distinctive vocal patterns in schizophrenia? 
+Use the data from Parola et al (2020) - https://www.dropbox.com/s/0l9ur0gaabr80a8/Matrix_MetaAnalysis_Diagnosis_updated290719.xlsx?dl=0 - focusing on pitch variability (PITCH_F0SD).  Describe the data available (studies, participants). Using the model from question 1 analyze the data, visualize and report the findings: population level effect size; how well studies reflect it; influential studies, publication bias. 
+BONUS question: assess the effect of task on the estimates (model comparison with baseline model)
+
+
+```{r load data}
+d_real <- readxl::read_excel("Matrix_MetaAnalysis.xlsx")
+```
+
+```{r Describing studies}
+paste0("The number of studies is ", length(unique(d_real$Title)))
+paste0("There is ", length(d_real$Title) -length(unique(d_real$Title)), " data entries from the same studies")
+```
+
+```{r Reshape dataframe}
+d_real_filtered <- d_real %>%  select(Title:FEMALE_HC,PITCH_F0SD_HC_M:PITCH_F0SD_SZ_SD) %>% #Selecting relevant datacollumns
+  mutate("SD_POOLED" = sqrt((PITCH_F0SD_HC_SD^2 + PITCH_F0SD_SZ_SD^2)/2)) %>% #Creating SD_pooled
+  mutate("EFFECT_SIZE" = (PITCH_F0SD_SZ_M-PITCH_F0SD_HC_M)/SD_POOLED) %>%  #Creating Effect_size collumn
+  filter(is.na(EFFECT_SIZE) != TRUE & MALE_SZ != "NR") #Filter NA away
+```
+
+```{r}
+#Creating column with effect error
+d_real_filtered[6:9] <- sapply(d_real_filtered[6:9], as.numeric)
+
+d_real_filtered <- d_real_filtered %>%
+  mutate("Pitch_SD" = (PITCH_F0SD_HC_SD+PITCH_F0SD_SZ_SD)/2, "N_participants" = MALE_SZ + FEMALE_SZ + MALE_HC + FEMALE_HC)
+
+d_real_filtered <- d_real_filtered %>%
+  mutate("EFFECT_ERROR" = Pitch_SD/sqrt(N_participants))
+
+```
+
+```{r visual investigation}
+#transforming the participant coloumns in order to plot them
+d_real_graph <- d_real_filtered[-4,]
+
+d_real_graph <- d_real_graph %>% 
+  mutate(
+    n_participants_sz = FEMALE_SZ + MALE_SZ,
+    n_participants_hc = FEMALE_HC + MALE_HC,
+    sz_mean = round(mean(n_participants_sz),0),
+    hc_mean =round(mean(n_participants_hc),0),
+    hc_male_mean =round(mean(MALE_HC),0),
+    sz_male_mean =round(mean(MALE_SZ),0),
+    hc_female_mean =round(mean(FEMALE_HC),0),
+    sz_female_mean =round(mean(FEMALE_SZ),0),
+  ) %>% 
+  rowid_to_column("ID")
+
+#plotting the number of participants per study for the HC and SZ
+d_real_graph %>% 
+  ggplot() +
+  geom_density(aes(n_participants_sz), alpha = .2, color = "red") +
+  geom_density(aes(n_participants_hc), alpha = .2, color = "green") +
+  geom_vline(xintercept = d_real_graph$sz_mean, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = d_real_graph$hc_mean, linetype = "dashed", color = "green") +
+  labs(title = "Overall number of HC and SZ participants", subtitle = "Lines indicating mean of participant type") +
+  xlab("Number of participants") + 
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 15)) +
+  theme_minimal()+ scale_fill_manual(name = "Participant type", values = c(SZ = "red", HC = "green"))
+
+d_real_graph %>% 
+  ggplot(aes(x = ID)) +
+  geom_point(aes(y =n_participants_sz), color = "red") +
+  geom_point(aes(y =n_participants_hc), color = "green") + 
+  labs(title = "Comparison of number of HC and SZ participants", subtitle = "Green indicating HC, Red indicating SZ") +
+  ylab("Number of participants") + 
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 15))+
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 13))+ theme_minimal() + scale_fill_manual(name = "Participant type", values = c(SZ = "red", HC = "green"))
+```
+
+```{r visual investigation}
+plot_female <- d_real_graph %>% 
+  ggplot() +
+  xlim(0, 70)+
+  geom_density(aes(FEMALE_SZ), alpha = .2, color = "red")+
+  geom_density(aes(FEMALE_HC), alpha = .2, color = "blue") +
+  geom_vline(xintercept = d_real_graph$hc_female_mean, linetype = "dashed", color = "blue") +
+  geom_vline(xintercept = d_real_graph$sz_female_mean, color = "red", linetype = "dashed") +
+  labs(title = "Distribution of female HC and SZ participants", subtitle = "Dashed lines indicating mean of participant type") +
+  xlab("Number of participants") + 
+  theme_minimal()+ scale_fill_manual(name = "Participant type", values = c(SZ = "red", HC = "blue"))
+
+plot_male <- d_real_graph %>% 
+  ggplot() +
+  xlim(0, 70)+
+  geom_density(aes(MALE_SZ), alpha = .2, color = "blue") +
+  geom_density(aes(MALE_HC), alpha = .2, color = "red") +
+  geom_vline(xintercept = d_real_graph$hc_male_mean, color = "blue", linetype = "dashed") +
+  geom_vline(xintercept = d_real_graph$sz_male_mean, color = "red", linetype =
+               "dashed")+
+labs(title = "Distribution of male HC and SZ participants", subtitle = "Dashed lines indicating mean of participant type") +
+  xlab("Number of participants") + 
+  theme_minimal()+ scale_fill_manual(name = "Participant type", values = c(SZ = "red", HC = "blue"))
+
+gridExtra::grid.arrange(plot_male, plot_female)
+```
+In general, there is more male participants than female. There is also quite a gap in the number of SZ patients between the genders. There is a mean of 12 female SZ participants, and a mean of 34 male SZ participants. 
+
+```{r}
+#Comparsion of effect size for each study
+d_real_graph %>%
+  mutate(ID = as.factor(ID))%>% 
+  ggplot(aes(x = ID, y = EFFECT_SIZE, fill = ID)) + geom_col() + labs(title = "Comparison of effect size for each study")
+  
+d_real_graph %>%
+  mutate(ID = as.factor(ID))%>% 
+  ggplot(aes(x = ID, y = EFFECT_ERROR, fill = ID)) + geom_col() + labs(title = "Comparison of effect error for each study")
+```
+---
+This plot indicates huge variability in the effect sizes from the different studies. The huge variability makes us quite sceptical of the studies
+
+---
+
+```{r}
+#Plot showing mean pitch for both groups
+pitch_hc_m <- ggplot(d_real_filtered) + geom_histogram(aes(PITCH_F0SD_HC_M), fill = "red", color = "red", alpha = 0.3, bins = 50) + xlab("Mean pitch control group") + xlim(0,85)
+pitch_sz_m <- ggplot(d_real_filtered) + geom_histogram(aes(PITCH_F0SD_SZ_M), fill = "green", color = "green", alpha = 0.3, bins = 50)+ xlab("Mean pitch schizofrenia") + xlim(0,85)
+
+gridExtra::grid.arrange(pitch_hc_m, pitch_sz_m)
+```
+
+```{r}
+pitch_hc_sd <- ggplot(d_real_filtered) + geom_histogram(aes(PITCH_F0SD_HC_SD), fill = "red", color = "red", alpha = 0.3, bins = 50) + xlab("Pitch standard deviation control group") + xlim(0,50)
+pitch_sz_sd <- ggplot(d_real_filtered) + geom_histogram(aes(PITCH_F0SD_SZ_SD), fill = "green", color = "green", alpha = 0.3, bins = 50)+ xlab("Pitch standard deviation schizofrenia") + xlim(0,50)
+
+grid.arrange(pitch_hc_sd, pitch_sz_sd)
+```
+
+```{r Modelling}
+ma_f0_real <- bf(EFFECT_SIZE | se(EFFECT_ERROR) ~ 1 + (1 | Title) )
+
+get_prior(ma_f0_real,
+          data = d_real_filtered,
+          family = gaussian)
+
+ma_real <- brm(
+  ma_f0_real,
+  data = d_real_filtered,
+  save_pars = save_pars(all = T),
+  family = gaussian,
+  prior = ma_p0,
+  sample_prior = T,
+  backend = "cmdstanr",
+  threads = threading(2),
+  chains = 2,
+  cores = 4,
+  control = list(
+    adapt_delta = 0.9,
+    max_treedepth = 20
+  ))
+
+pp_check(ma_real, ndraws=100)
+```
+## Reporting the findings
+##Visualizing the findings
+```{r}
+posterior_real <- as_draws_df(ma_real)
+
+
+p1_real <- ggplot(posterior_prior) + geom_histogram(aes(b_Intercept), fill = "red", color = "red", alpha = 0.3, bins = 50) + xlab("Prior-posterior") + xlim(-0.8,0.8)
+
+p2_real <- ggplot(posterior_real) + geom_histogram(aes(b_Intercept), fill = "green", color = "green", alpha = 0.3, bins = 50) + xlab("Posterior emperical data")+ xlim(-0.8,0.8)
+
+p2_pub <- ggplot(posterior_pub) + geom_histogram(aes(b_Intercept), fill = "yellow", color = "yellow", alpha = 0.3, bins = 50) + xlab("Posterior with publication bias")+ xlim(-0.8,0.8)
+
+grid.arrange(p1_real, p2_real, p2_pub)
+
+summary(ma_real)
+```
+
+---
+These plots indicate, that when making a model that combines effect sizes from all of the different studies, we don't get a population level effect size: Population level intercept = -0.07
+
+---
