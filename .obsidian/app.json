@@ -1,4 +1,5 @@
 {
   "alwaysUpdateLinks": true,
-  "attachmentFolderPath": "Obsidian_attachements"
+  "attachmentFolderPath": "Obsidian_attachements",
+  "spellcheck": true
 }

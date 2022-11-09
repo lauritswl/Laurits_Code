@@ -1,0 +1,174 @@
+---
+title: "Assignment 2 - Meta-analysis of pitch in schizophrenia"
+author: "Riccardo Fusaroli"
+date: "16/8/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Assignment 2: meta-analysis
+
+## Questions to be answered
+
+1. Simulate data to setup the analysis and gain insight on the structure of the problem. Simulate one dataset of 100 studies (n of participants should follow a normal distribution with mean of 20, sd of 10, but no fewer than 10 participants), with a mean effect size of 0.4, average deviation by study of .4 and measurement error of .8. The data you get should have one row per study, with an effect size mean and standard error. Build a proper bayesian model to analyze the simulated data. Then simulate publication bias (only some of the studies you simulate are likely to be published, which?), the effect of publication bias on your estimates (re-run the model on published studies, assess the difference), and discuss what this implies for your model. remember to use at least one plot to visualize your results. 
+BONUS question: do a power/precision analysis: w this kind of sample sizes (participants) how many studies would you need to acquire good precision (e.g. .1 sd in the pop level estimate)
+
+
+# Question 1:  Simulate data to setup the analysis and gain insight on the structure of the problem.
+```{r}
+#Installing packages and setting seed for repreoducability
+pacman::p_load(tidyverse, brms, bayesplot, rstanarm, msm, cmdstanr)
+set.seed(123)
+#parameter identification
+EffectMean <- 0.4
+StudySD <- 0.4
+Error <- 0.8
+#specifying number of studies
+Studies <- 100
+n_participants <- 20
+n_participants_sd <- 10
+min_participants <- 10
+
+#simulating 100 studies
+d <- tibble(
+  Study = seq(Studies),
+  Participants = round(msm::rtnorm(Studies, n_participants, n_participants_sd, lower = min_participants), 0),
+  StudyEffect = NA,
+  EffectMu = NA,
+  EffectError = NA
+)
+
+#simulating parameters for each study
+for (i in seq(Studies)){
+  d$StudyEffect[i] <- rnorm(1, EffectMean, StudySD)
+  sampling <- rnorm(d$Participants[i], d$StudyEffect[i], Error)
+  d$EffectMu[i] <- mean(sampling)
+  d$EffectError[i] <- sd(sampling)/sqrt(d$Participants[i])
+}
+
+#setting priors
+ma_p0 <- c(
+  prior(normal(0, 0.3), class = Intercept),
+  prior(normal(0, 0.3), class = sd))
+
+ma_p1 <- c(
+  prior(normal(0, 0.3), class = Intercept),
+  prior(normal(0, 0.3), class = sd))
+
+#setting models
+ma_f0 <- bf(EffectMu | se(EffectError) ~ 1 + (1|Study))
+
+
+#getting priors for the models
+#priors for ma_f0
+get_prior(ma_f0,
+          data = d, 
+          family = gaussian)
+```
+    
+
+Running STANbrm
+```{r}
+#running the models
+ma_m0_prior <- brm(
+  ma_f0,
+  data = d,
+  family = gaussian,
+  prior = ma_p0,
+  sample_prior = "only",
+  backend = "cmdstanr",
+  threads = threading(2),
+  chains = 2,
+  cores = 4,
+  control = list(
+    adapt_delta = 0.9,
+    max_treedepth = 20))
+
+```
+
+```{r}
+#symmetric prior bias 
+pp_check(
+  ma_m0_prior, ndraws = 100)
+
+#including publication bias
+if (TRUE){
+    d1 <- d
+#loops through all the studies
+    for (i in seq(Studies)){
+#checks if the absolute value of the specific study's effectMU minus two standard
+#deviations is above 0. If it is there is a 95% chance that the study is published, if not
+#only a 5% chance of being published.
+        d1$Published[i] <- ifelse(
+            abs(d$EffectMu[i]) - (2*d$EffectError[i]) > 0,
+            rbinom(1, 1, .95), rbinom(1, 1, .05))
+#Does the same as the above ifelse function but the study's effectMU also has to be positive. 
+        d1$PublishedPos[i] <- ifelse(
+            abs(d$EffectMu[i]) - (2*d$EffectError[i]) > 0 & d$EffectMu[i] > 0,
+            rbinom(1, 1, .95), rbinom(1, 1, .05))}}
+#checks if the absolute value of the specific study's effectMU minus two standard             
+#deviations is above 0. If it is there is a 95% chance that the study is published, if not     #only a 5% chance of being published.
+  
+#updating the models
+ma_m0_all <- brm(
+  ma_f0,
+  data = d1,
+  save_pars = save_pars(all = T),
+  family = gaussian,
+  prior = ma_p0,
+  sample_prior = T,
+  backend = "cmdstanr",
+  threads = threading(2),
+  chains = 2,
+  cores = 4,
+  control = list(
+    adapt_delta = 0.9,
+    max_treedepth = 20
+  ))
+
+ma_m0_pub <- update(
+  ma_m0_all, newdata = subset(d1, Published == 1))
+
+ma_m0_pubpos <- update(
+  ma_m0_all, newdata = subset(d1, PublishedPos == 1))
+```
+
+PPChecks:
+
+```{r}
+#pp checks of all the models
+#all studies 
+pp_check(
+  ma_m0_all, ndraws = 100)
+```
+
+
+```{r}
+#symmetric pubplication bias 
+pp_check(
+  ma_m0_pub, ndraws = 100)
+```
+
+
+```{r}
+#symmetric positive pubblication bias 
+pp_check(
+  ma_m0_pubpos, ndraws = 100)
+
+```
+
+## Question 2
+2. What is the current evidence for distinctive vocal patterns in schizophrenia? 
+Use the data from Parola et al (2020) - https://www.dropbox.com/s/0l9ur0gaabr80a8/Matrix_MetaAnalysis_Diagnosis_updated290719.xlsx?dl=0 - focusing on pitch variability (PITCH_F0SD).  Describe the data available (studies, participants). Using the model from question 1 analyze the data, visualize and report the findings: population level effect size; how well studies reflect it; influential studies, publication bias. 
+BONUS question: assess the effect of task on the estimates (model comparison with baseline model)
+
+```{r}
+d_real <- readxl::read_excel("Matrix_MetaAnalysis.xlsx")
+
+
+
+```
+

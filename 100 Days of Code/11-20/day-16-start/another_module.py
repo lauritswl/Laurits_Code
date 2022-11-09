@@ -1,0 +1,1 @@
+another_string = "Hello From Other Module"

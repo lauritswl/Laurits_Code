@@ -30,5 +30,16 @@
 ## Day 10:
 [[Functions with outputs]]
 
-## Day 11:
-[[Blackjack]]
+## Day 16:
+[[Object Oriented Programming (OOP)]]
+
+## Day 17:
+[[Creating your own class ]]
+
+## Day 18:
+[[Importing modules]]
+[[Tuples]]
+
+## Day 19:
+[[Event Listeners]]
+[[Higher Order Functions]]

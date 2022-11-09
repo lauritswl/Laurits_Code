@@ -1,0 +1,167 @@
+---
+title: "Assignment 3 - Machine Learning"
+author: "Elisius, Laurits, Tilde & Niels"
+date: "02/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Assignment 3: Machine Learning
+
+## Part I - Simulating data
+
+Use the meta-analysis reported in Parola et al (2020), create a simulated dataset with 100 matched pairs of schizophrenia and controls, each participant producing 10 repeated measures (10 trials with their speech recorded). for each of these "recordings" (data points) produce 10 acoustic measures: 6 from the meta-analysis, 4 with just random noise. Do the same for a baseline dataset including only 10 noise variables. Tip: see the slides for the code. 
+#### Loading packages
+```{r load packages}
+pacman::p_load(tidyverse, brms, bayesplot, rstanarm, msm, cmdstanr)
+set.seed(123)
+```
+
+
+```{r Setting variables}
+#population size
+n <- 100 #in each group
+trials <- 10
+
+#different effect sizes: 6 from meta analysis, 4 for random noice
+InformedEffectMean <- c(0,0,0,0, -0.23096087, -0.55698815, -0.05472132, -0.14332350, 0.20377619, -0.41653998)
+#introducing a skeptic effect mean
+SkepticEffectMean <- rep(0,10)
+
+#individual variability from population and across trials and measurement errors
+IndividualSD <- 1
+TrialSD <- 0.5
+Error <- 0.2
+
+```
+
+```{r}
+Trial <- rep(1:10,100)
+id_SZ <- rep(101:200, each=10)
+id_CON <- rep(1:100, each=10)
+
+
+CON <- data.frame(
+  ID = id_CON,
+  Trial = Trial,
+  Condition = "Control"
+)%>%
+  mutate(v1 = NA) %>% 
+  mutate(v2 = NA) %>% 
+  mutate(v3 = NA) %>% 
+  mutate(v4 = NA) %>% 
+  mutate(v5 = NA) %>% 
+  mutate(v6 = NA) %>% 
+  mutate(v7 = NA) %>% 
+  mutate(v8 = NA) %>% 
+  mutate(v9 = NA) %>% 
+  mutate(v10 = NA)
+
+SZ <- data.frame(
+  ID = id_SZ,
+  Trial = Trial,
+  Condition = "Schizophrenia"
+)%>%
+  mutate(v1 = NA) %>% 
+  mutate(v2 = NA) %>% 
+  mutate(v3 = NA) %>% 
+  mutate(v4 = NA) %>% 
+  mutate(v5 = NA) %>% 
+  mutate(v6 = NA) %>% 
+  mutate(v7 = NA) %>% 
+  mutate(v8 = NA) %>% 
+  mutate(v9 = NA) %>% 
+  mutate(v10 = NA)
+```
+
+
+```{r rnorm for SZ}
+row <- 0
+for (c in 1:100){
+  Individual_DIFF <- sapply(FUN = rnorm, X = InformedEffectMean, n = 1, sd = IndividualSD)
+  for (i in 1:10){
+    SZ[row+i,4:13] <- Map(rnorm,1,Map(rnorm,1,-(Individual_DIFF)/2,TrialSD),Error)}
+  row <- row+10}
+
+row <- 0
+for (c in 1:100){
+  Individual_DIFF <- sapply(FUN = rnorm, X = SkepticEffectMean, n = 1, sd = IndividualSD)
+  for (i in 1:10){
+    CON[row+i,4:13] <- Map(rnorm,1,Map(rnorm,1,(Individual_DIFF)/2,TrialSD),Error)}
+  row <- row+10}
+
+informed <- rbind(CON,SZ)
+```
+
+
+```{r}
+CON_S <- data.frame(
+  ID = id_CON,
+  Trial = Trial,
+  Condition = "Control"
+)%>%
+  mutate(v1 = NA) %>% 
+  mutate(v2 = NA) %>% 
+  mutate(v3 = NA) %>% 
+  mutate(v4 = NA) %>% 
+  mutate(v5 = NA) %>% 
+  mutate(v6 = NA) %>% 
+  mutate(v7 = NA) %>% 
+  mutate(v8 = NA) %>% 
+  mutate(v9 = NA) %>% 
+  mutate(v10 = NA)
+
+SZ_S <- data.frame(
+  ID = id_SZ,
+  Trial = Trial,
+  Condition = "Schizophrenia"
+)%>%
+  mutate(v1 = NA) %>% 
+  mutate(v2 = NA) %>% 
+  mutate(v3 = NA) %>% 
+  mutate(v4 = NA) %>% 
+  mutate(v5 = NA) %>% 
+  mutate(v6 = NA) %>% 
+  mutate(v7 = NA) %>% 
+  mutate(v8 = NA) %>% 
+  mutate(v9 = NA) %>% 
+  mutate(v10 = NA)
+```
+
+
+```{r rnorm for SZ}
+row <- 0
+for (c in 1:100){
+  Individual_DIFF <- sapply(FUN = rnorm, X = SkepticEffectMean, n = 1, sd = IndividualSD)
+  for (i in 1:10){
+    SZ_S[row+i,4:13] <- Map(rnorm,1,Map(rnorm,1,-(Individual_DIFF)/2,TrialSD),Error)}
+  row <- row+10}
+
+row <- 0
+for (c in 1:100){
+  Individual_DIFF <- sapply(FUN = rnorm, X = SkepticEffectMean, n = 1, sd = IndividualSD)
+  for (i in 1:10){
+    CON_S[row+i,4:13] <- Map(rnorm,1,Map(rnorm,1,-(Individual_DIFF)/2,TrialSD),Error)}
+  row <- row+10}
+
+Skeptic <- rbind(CON_S,SZ_S)
+```
+
+
+
+
+
+
+## Part II - ML pipeline on simulated data
+
+On the two simulated datasets (separately) build a machine learning pipeline: i) create a data budget (e.g. balanced training and test sets); ii) pre-process the data (e.g. scaling the features); iii) fit and assess a classification algorithm on the training data (e.g. Bayesian multilevel logistic regression); iv) assess performance on the test set; v) discuss whether performance is as expected and feature importance is as expected.
+
+Bonus question: replace the bayesian multilevel regression with a different algorithm, e.g. SVM or random forest (but really, anything you'd like to try).
+
+
+## Part III - Applying the ML pipeline to empirical data
+
+Download the empirical dataset from brightspace and apply your ML pipeline to the new data, adjusting where needed. Warning: in the simulated dataset we only had 10 features, now you have many more! Such is the life of the ML practitioner. Consider the impact a higher number of features will have on your ML inference, and decide whether you need to cut down the number of features before running the pipeline (or alternatively expand the pipeline to add feature selection).
