@@ -43,3 +43,6 @@
 ## Day 19:
 [[Event Listeners]]
 [[Higher Order Functions]]
+
+## Day 24:
+[[Files, Directories and Paths]]

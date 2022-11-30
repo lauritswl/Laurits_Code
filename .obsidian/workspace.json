@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "70d5f2fc6e6b8f2c",
+        "id": "5f6d00e3c648dca7",
         "type": "tabs",
         "children": [
           {
-            "id": "444795557d6f0bd9",
+            "id": "fd79903e46be715e",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -20,43 +20,19 @@
             }
           },
           {
-            "id": "9b685cbd8988d304",
+            "id": "d86bfb37e656eb9a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "100 Days of Code/00 Index.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "65c0063f5bcddd51",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "100 Days of Code/00 Index.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "3cfecb6bb6f52c48",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Higher Order Functions.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +61,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "golem",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -122,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Higher Order Functions.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -139,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Higher Order Functions.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -162,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Higher Order Functions.md"
+                "file": "README.md"
               }
             }
           }
@@ -173,17 +149,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "3cfecb6bb6f52c48",
+  "active": "d86bfb37e656eb9a",
   "lastOpenFiles": [
-    "100 Days of Code/00 Index.md",
-    "Event Listeners.md",
-    "100 Days of Code/11-20/day_18/Tuples.md",
-    "100 Days of Code/11-20/day-17-start/Importing modules.md",
+    "100 Days of Code/day_24_file_management/Files, Directories and Paths.md",
     "100 Days of Code/11-20/day-16-start/Object Oriented Programming (OOP).md",
-    "100 Days of Code/11-20/day-17-start/Constructor.md",
-    "100 Days of Code/Day 1-10/List.md",
-    "100 Days of Code/Day 1-10/Dictionary.md",
-    "100 Days of Code/Day 1-10/Functions with outputs.md",
-    "100 Days of Code/Day 1-10/Docstrings.md"
+    "100 Days of Code/11-20/day-17-start/Creating your own class.md",
+    "Untitled.md",
+    "R/Tools of model engineering.md",
+    "TO BE FILLED/Markov Blanket.md",
+    "TO BE FILLED/Machine Learning.md",
+    "R/Bayesian data analysis.md",
+    "README.md",
+    "100 Days of Code/00 Index.md"
   ]
 }

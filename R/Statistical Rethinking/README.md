@@ -6,7 +6,24 @@ A book that uses more computer code than formal mathematics, and is more a cours
 **Why use code instread of point-and-click.program?**
 There are big advantages to doing statistics with text commands.  It is often the most powerfull tool and leaves your methods for replication later.
 
+
+### Tools of statistical rethinking:
+(1) 
+[[Bayesian data analysis]]
+(2) 
+[[Model comparison]]
+(3) 
+[[Multilevel models]]
+(4) 
+[[Graphical causal models]]
+
+
 ## Chapter 1: The Golem of Prague
-Introduces the [[The Golem of Prague]] - 
+Introduces the [[The Golem of Prague]] - [[Tools of model engineering]]
+
+
+
+
+
 
 
