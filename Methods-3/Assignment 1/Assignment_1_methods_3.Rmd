@@ -24,10 +24,8 @@ iii) the amount of morphemes per utterance (Mean Length of Utterance) displayed 
 This data is in the file you prepared in the previous class, but you can also find it here:https://www.dropbox.com/s/d6eerv6cl6eksf3/data_clean.csv?dl=0
 
 ```{r}
-
 pacman::p_load(tidyverse, dplyr, brms, bayesplot, rstanarm)
 d <- read_csv("CleanedChild_Data.csv")
-
 ```
 
 
@@ -451,7 +449,6 @@ d %>% group_by(Diagnosis, Visit) %>% summarise(mean_mlu_inc = mean(CHI_MLU) ) %>
 
 
 mcmc_intervals(MLU_model_real_22, pars = c("b_DiagnosisASD:Visit", "b_DiagnosisTD:Visit"))
-
 ```
 ___
 *Differences between lingustic development of MLU between ASD and TD over time*

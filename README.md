@@ -4,7 +4,9 @@ _______________________________________________
 This repository will have my code snippets for **R, git_bash and Python**.
 
 ### R Folder
-Functions used through my work, that i save for later use
+Functions used through my work, that I save for later use.
+	> Statistical rethinking notes - introduction to Bayesian statistical analysis in R 
+
 
 ### GitBash
 Basic functions for using gitbash, and fixes for errors
@@ -13,4 +15,4 @@ Basic functions for using gitbash, and fixes for errors
 Assignment, CSV's and Markdowns used in methods 3
 
 ### 100 Days of Code
-Im learning python through a online course, follow along :)
+I'm learning python through a online course, follow along :)

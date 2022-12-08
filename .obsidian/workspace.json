@@ -4,28 +4,28 @@
     "type": "split",
     "children": [
       {
-        "id": "5f6d00e3c648dca7",
+        "id": "61f73b284b41fcf5",
         "type": "tabs",
         "children": [
           {
-            "id": "fd79903e46be715e",
+            "id": "d7f89e6de8e31515",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "100 Days of Code/11-20/day-16-start/Object Oriented Programming (OOP).md",
+                "file": "R/Statistical Rethinking/README.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "d86bfb37e656eb9a",
+            "id": "e36e01ba7a86378f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "R/Statistical Rethinking/README.md",
                 "mode": "source",
                 "source": false
               }
@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "R/Statistical Rethinking/README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "R/Statistical Rethinking/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
+                "file": "R/Statistical Rethinking/README.md"
               }
             }
           }
@@ -149,17 +149,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "d86bfb37e656eb9a",
+  "active": "e36e01ba7a86378f",
   "lastOpenFiles": [
-    "100 Days of Code/day_24_file_management/Files, Directories and Paths.md",
-    "100 Days of Code/11-20/day-16-start/Object Oriented Programming (OOP).md",
-    "100 Days of Code/11-20/day-17-start/Creating your own class.md",
+    "R/Statistical Rethinking/Markdowns/Causal Inference.md",
+    "Statistical Rethinking Vocabulary.md",
+    "R/Statistical Rethinking/README.md",
+    "R/Statistical Rethinking/Markdowns/Tools of model engineering.md",
+    "R/Statistical Rethinking/Markdowns/Scientific model.md",
+    "R/Statistical Rethinking/Markdowns/Statistical models.md",
+    "R/Statistical Rethinking/Markdowns/Bayesian data analysis.md",
+    "R/Statistical Rethinking/Markdowns/The Golem of Prague.md",
     "Untitled.md",
-    "R/Tools of model engineering.md",
-    "TO BE FILLED/Markov Blanket.md",
-    "TO BE FILLED/Machine Learning.md",
-    "R/Bayesian data analysis.md",
-    "README.md",
-    "100 Days of Code/00 Index.md"
+    "Images/Pasted image 20221201175152.png"
   ]
 }
