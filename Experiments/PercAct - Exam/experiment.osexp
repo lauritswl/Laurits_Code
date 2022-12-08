@@ -1,0 +1,549 @@
+---
+API: 2.1
+OpenSesame: 3.3.12
+Platform: nt
+---
+set width 1600
+set uniform_coordinates yes
+set title "Extended template"
+set subject_parity even
+set subject_nr 0
+set start experiment
+set sound_sample_size -16
+set sound_freq 48000
+set sound_channels 2
+set sound_buf_size 1024
+set sampler_backend psycho
+set round_decimals 2
+set psychopy_waitblanking yes
+set psychopy_monitor testMonitor
+set mouse_backend psycho
+set keyboard_backend psycho
+set height 900
+set fullscreen no
+set form_clicks no
+set foreground white
+set font_underline no
+set font_size 18
+set font_italic no
+set font_family mono
+set font_bold no
+set experiment_path "C:/Users/lauri/Desktop/Local_Git/Laurits_Code/Experiments/Mousetracking"
+set disable_garbage_collection yes
+set description "A template containing a practice and an experimental phase"
+set coordinates uniform
+set compensation 0
+set color_backend psycho
+set clock_backend psycho
+set canvas_backend psycho
+set bidi yes
+set background black
+
+define loop ExperimentLoop
+	set source_file "Trial_generation.xlsx"
+	set source table
+	set repeat 1
+	set order sequential
+	set description "Repeatedly runs another item"
+	set cycles 22
+	set continuous yes
+	set break_if_on_first yes
+	set break_if never
+	setcycle 0 ID_1 5
+	setcycle 0 ID_changer -1
+	setcycle 0 ID_2 4
+	setcycle 0 Size_1 366
+	setcycle 0 Radius_1 183
+	setcycle 0 Pitch_1 1500
+	setcycle 0 Percent_1 0.53
+	setcycle 0 Size_2 333
+	setcycle 0 Radius_2 167
+	setcycle 0 New_Pitch 1000
+	setcycle 0 Diff 500
+	setcycle 0 Pitch_2 1000
+	setcycle 0 Percent_2 0.5
+	setcycle 0 Trial_Type Control
+	setcycle 0 Data_Type Training
+	setcycle 0 Data_Type_Sort 0
+	setcycle 0 Correct_Response SMALLER
+	setcycle 1 ID_1 4
+	setcycle 1 ID_changer -1
+	setcycle 1 ID_2 3
+	setcycle 1 Size_1 333
+	setcycle 1 Radius_1 166.5
+	setcycle 1 Pitch_1 1000
+	setcycle 1 Percent_1 0.5
+	setcycle 1 Size_2 303
+	setcycle 1 Radius_2 151.5
+	setcycle 1 New_Pitch 667
+	setcycle 1 Diff 333
+	setcycle 1 Pitch_2 667
+	setcycle 1 Percent_2 0.51
+	setcycle 1 Trial_Type Control
+	setcycle 1 Data_Type Training
+	setcycle 1 Data_Type_Sort 0
+	setcycle 1 Correct_Response SMALLER
+	setcycle 2 ID_1 3
+	setcycle 2 ID_changer 1
+	setcycle 2 ID_2 4
+	setcycle 2 Size_1 303
+	setcycle 2 Radius_1 151.5
+	setcycle 2 Pitch_1 667
+	setcycle 2 Percent_1 0.51
+	setcycle 2 Size_2 333
+	setcycle 2 Radius_2 166.5
+	setcycle 2 New_Pitch 1000
+	setcycle 2 Diff -333
+	setcycle 2 Pitch_2 1000
+	setcycle 2 Percent_2 0.5
+	setcycle 2 Trial_Type Control
+	setcycle 2 Data_Type Training
+	setcycle 2 Data_Type_Sort 0
+	setcycle 2 Correct_Response BIGGER
+	setcycle 3 ID_1 5
+	setcycle 3 ID_changer 1
+	setcycle 3 ID_2 6
+	setcycle 3 Size_1 366
+	setcycle 3 Radius_1 183
+	setcycle 3 Pitch_1 1500
+	setcycle 3 Percent_1 0.53
+	setcycle 3 Size_2 403
+	setcycle 3 Radius_2 201.5
+	setcycle 3 New_Pitch 2250
+	setcycle 3 Diff -750
+	setcycle 3 Pitch_2 2250
+	setcycle 3 Percent_2 0.48
+	setcycle 3 Trial_Type Control
+	setcycle 3 Data_Type Training
+	setcycle 3 Data_Type_Sort 0
+	setcycle 3 Correct_Response BIGGER
+	setcycle 4 ID_1 6
+	setcycle 4 ID_changer -1
+	setcycle 4 ID_2 5
+	setcycle 4 Size_1 403
+	setcycle 4 Radius_1 201.5
+	setcycle 4 Pitch_1 2250
+	setcycle 4 Percent_1 0.48
+	setcycle 4 Size_2 366
+	setcycle 4 Radius_2 183
+	setcycle 4 New_Pitch 1500
+	setcycle 4 Diff 750
+	setcycle 4 Pitch_2 1500
+	setcycle 4 Percent_2 0.53
+	setcycle 4 Trial_Type Control
+	setcycle 4 Data_Type Dataset
+	setcycle 4 Data_Type_Sort 1
+	setcycle 4 Correct_Response SMALLER
+	setcycle 5 ID_1 6
+	setcycle 5 ID_changer -1
+	setcycle 5 ID_2 5
+	setcycle 5 Size_1 403
+	setcycle 5 Radius_1 201.5
+	setcycle 5 Pitch_1 2250
+	setcycle 5 Percent_1 0.48
+	setcycle 5 Size_2 366
+	setcycle 5 Radius_2 183
+	setcycle 5 New_Pitch 1500
+	setcycle 5 Diff 750
+	setcycle 5 Pitch_2 1500
+	setcycle 5 Percent_2 0.53
+	setcycle 5 Trial_Type Control
+	setcycle 5 Data_Type Dataset
+	setcycle 5 Data_Type_Sort 1
+	setcycle 5 Correct_Response SMALLER
+	setcycle 6 ID_1 2
+	setcycle 6 ID_changer -1
+	setcycle 6 ID_2 1
+	setcycle 6 Size_1 275
+	setcycle 6 Radius_1 137.5
+	setcycle 6 Pitch_1 444
+	setcycle 6 Percent_1 0.53
+	setcycle 6 Size_2 250
+	setcycle 6 Radius_2 125
+	setcycle 6 New_Pitch 296
+	setcycle 6 Diff 148
+	setcycle 6 Pitch_2 296
+	setcycle 6 Percent_2 0.54
+	setcycle 6 Trial_Type Control
+	setcycle 6 Data_Type Dataset
+	setcycle 6 Data_Type_Sort 1
+	setcycle 6 Correct_Response SMALLER
+	setcycle 7 ID_1 2
+	setcycle 7 ID_changer 1
+	setcycle 7 ID_2 3
+	setcycle 7 Size_1 275
+	setcycle 7 Radius_1 137.5
+	setcycle 7 Pitch_1 444
+	setcycle 7 Percent_1 0.53
+	setcycle 7 Size_2 303
+	setcycle 7 Radius_2 151.5
+	setcycle 7 New_Pitch 667
+	setcycle 7 Diff -223
+	setcycle 7 Pitch_2 667
+	setcycle 7 Percent_2 0.51
+	setcycle 7 Trial_Type Control
+	setcycle 7 Data_Type Dataset
+	setcycle 7 Data_Type_Sort 1
+	setcycle 7 Correct_Response BIGGER
+	setcycle 8 ID_1 6
+	setcycle 8 ID_changer 1
+	setcycle 8 ID_2 7
+	setcycle 8 Size_1 403
+	setcycle 8 Radius_1 201.5
+	setcycle 8 Pitch_1 2250
+	setcycle 8 Percent_1 0.48
+	setcycle 8 Size_2 443
+	setcycle 8 Radius_2 221.5
+	setcycle 8 New_Pitch 3375
+	setcycle 8 Diff -1125
+	setcycle 8 Pitch_2 3375
+	setcycle 8 Percent_2 0.47
+	setcycle 8 Trial_Type Control
+	setcycle 8 Data_Type Dataset
+	setcycle 8 Data_Type_Sort 1
+	setcycle 8 Correct_Response BIGGER
+	setcycle 9 ID_1 2
+	setcycle 9 ID_changer 1
+	setcycle 9 ID_2 3
+	setcycle 9 Size_1 275
+	setcycle 9 Radius_1 137.5
+	setcycle 9 Pitch_1 444
+	setcycle 9 Percent_1 0.53
+	setcycle 9 Size_2 303
+	setcycle 9 Radius_2 151.5
+	setcycle 9 New_Pitch 667
+	setcycle 9 Diff -223
+	setcycle 9 Pitch_2 667
+	setcycle 9 Percent_2 0.51
+	setcycle 9 Trial_Type Control
+	setcycle 9 Data_Type Dataset
+	setcycle 9 Data_Type_Sort 1
+	setcycle 9 Correct_Response BIGGER
+	setcycle 10 ID_1 4
+	setcycle 10 ID_changer -1
+	setcycle 10 ID_2 3
+	setcycle 10 Size_1 333
+	setcycle 10 Radius_1 166.5
+	setcycle 10 Pitch_1 1000
+	setcycle 10 Percent_1 0.5
+	setcycle 10 Size_2 303
+	setcycle 10 Radius_2 151.5
+	setcycle 10 New_Pitch 667
+	setcycle 10 Diff -333
+	setcycle 10 Pitch_2 334
+	setcycle 10 Percent_2 0.51
+	setcycle 10 Trial_Type Congurent
+	setcycle 10 Data_Type Dataset
+	setcycle 10 Data_Type_Sort 1
+	setcycle 10 Correct_Response SMALLER
+	setcycle 11 ID_1 5
+	setcycle 11 ID_changer -1
+	setcycle 11 ID_2 4
+	setcycle 11 Size_1 366
+	setcycle 11 Radius_1 183
+	setcycle 11 Pitch_1 1500
+	setcycle 11 Percent_1 0.53
+	setcycle 11 Size_2 333
+	setcycle 11 Radius_2 166.5
+	setcycle 11 New_Pitch 1000
+	setcycle 11 Diff -500
+	setcycle 11 Pitch_2 500
+	setcycle 11 Percent_2 0.5
+	setcycle 11 Trial_Type Congurent
+	setcycle 11 Data_Type Dataset
+	setcycle 11 Data_Type_Sort 1
+	setcycle 11 Correct_Response SMALLER
+	setcycle 12 ID_1 4
+	setcycle 12 ID_changer -1
+	setcycle 12 ID_2 3
+	setcycle 12 Size_1 333
+	setcycle 12 Radius_1 166.5
+	setcycle 12 Pitch_1 1000
+	setcycle 12 Percent_1 0.5
+	setcycle 12 Size_2 303
+	setcycle 12 Radius_2 151.5
+	setcycle 12 New_Pitch 667
+	setcycle 12 Diff -333
+	setcycle 12 Pitch_2 334
+	setcycle 12 Percent_2 0.51
+	setcycle 12 Trial_Type Congurent
+	setcycle 12 Data_Type Dataset
+	setcycle 12 Data_Type_Sort 1
+	setcycle 12 Correct_Response SMALLER
+	setcycle 13 ID_1 5
+	setcycle 13 ID_changer 1
+	setcycle 13 ID_2 6
+	setcycle 13 Size_1 366
+	setcycle 13 Radius_1 183
+	setcycle 13 Pitch_1 1500
+	setcycle 13 Percent_1 0.53
+	setcycle 13 Size_2 403
+	setcycle 13 Radius_2 201.5
+	setcycle 13 New_Pitch 2250
+	setcycle 13 Diff 750
+	setcycle 13 Pitch_2 3000
+	setcycle 13 Percent_2 0.48
+	setcycle 13 Trial_Type Congurent
+	setcycle 13 Data_Type Dataset
+	setcycle 13 Data_Type_Sort 1
+	setcycle 13 Correct_Response BIGGER
+	setcycle 14 ID_1 4
+	setcycle 14 ID_changer 1
+	setcycle 14 ID_2 5
+	setcycle 14 Size_1 333
+	setcycle 14 Radius_1 166.5
+	setcycle 14 Pitch_1 1000
+	setcycle 14 Percent_1 0.5
+	setcycle 14 Size_2 366
+	setcycle 14 Radius_2 183
+	setcycle 14 New_Pitch 1500
+	setcycle 14 Diff 500
+	setcycle 14 Pitch_2 2000
+	setcycle 14 Percent_2 0.53
+	setcycle 14 Trial_Type Congurent
+	setcycle 14 Data_Type Dataset
+	setcycle 14 Data_Type_Sort 1
+	setcycle 14 Correct_Response BIGGER
+	setcycle 15 ID_1 4
+	setcycle 15 ID_changer 1
+	setcycle 15 ID_2 5
+	setcycle 15 Size_1 333
+	setcycle 15 Radius_1 166.5
+	setcycle 15 Pitch_1 1000
+	setcycle 15 Percent_1 0.5
+	setcycle 15 Size_2 366
+	setcycle 15 Radius_2 183
+	setcycle 15 New_Pitch 1500
+	setcycle 15 Diff 500
+	setcycle 15 Pitch_2 2000
+	setcycle 15 Percent_2 0.53
+	setcycle 15 Trial_Type Congurent
+	setcycle 15 Data_Type Dataset
+	setcycle 15 Data_Type_Sort 1
+	setcycle 15 Correct_Response BIGGER
+	setcycle 16 ID_1 6
+	setcycle 16 ID_changer -1
+	setcycle 16 ID_2 3
+	setcycle 16 Size_1 333
+	setcycle 16 Radius_1 166.5
+	setcycle 16 Pitch_1 1000
+	setcycle 16 Percent_1 0.48
+	setcycle 16 Size_2 303
+	setcycle 16 Radius_2 151.5
+	setcycle 16 New_Pitch 667
+	setcycle 16 Diff -333
+	setcycle 16 Pitch_2 1333
+	setcycle 16 Percent_2 0.51
+	setcycle 16 Trial_Type Incongurent
+	setcycle 16 Data_Type Dataset
+	setcycle 16 Data_Type_Sort 1
+	setcycle 16 Correct_Response SMALLER
+	setcycle 17 ID_1 3
+	setcycle 17 ID_changer -1
+	setcycle 17 ID_2 5
+	setcycle 17 Size_1 403
+	setcycle 17 Radius_1 201.5
+	setcycle 17 Pitch_1 2250
+	setcycle 17 Percent_1 0.51
+	setcycle 17 Size_2 366
+	setcycle 17 Radius_2 183
+	setcycle 17 New_Pitch 1500
+	setcycle 17 Diff -750
+	setcycle 17 Pitch_2 3000
+	setcycle 17 Percent_2 0.53
+	setcycle 17 Trial_Type Incongurent
+	setcycle 17 Data_Type Dataset
+	setcycle 17 Data_Type_Sort 1
+	setcycle 17 Correct_Response SMALLER
+	setcycle 18 ID_1 3
+	setcycle 18 ID_changer -1
+	setcycle 18 ID_2 2
+	setcycle 18 Size_1 303
+	setcycle 18 Radius_1 151.5
+	setcycle 18 Pitch_1 667
+	setcycle 18 Percent_1 0.51
+	setcycle 18 Size_2 275
+	setcycle 18 Radius_2 137.5
+	setcycle 18 New_Pitch 444
+	setcycle 18 Diff -223
+	setcycle 18 Pitch_2 890
+	setcycle 18 Percent_2 0.53
+	setcycle 18 Trial_Type Incongurent
+	setcycle 18 Data_Type Dataset
+	setcycle 18 Data_Type_Sort 1
+	setcycle 18 Correct_Response SMALLER
+	setcycle 19 ID_1 3
+	setcycle 19 ID_changer 1
+	setcycle 19 ID_2 4
+	setcycle 19 Size_1 303
+	setcycle 19 Radius_1 151.5
+	setcycle 19 Pitch_1 667
+	setcycle 19 Percent_1 0.51
+	setcycle 19 Size_2 333
+	setcycle 19 Radius_2 166.5
+	setcycle 19 New_Pitch 1000
+	setcycle 19 Diff 333
+	setcycle 19 Pitch_2 334
+	setcycle 19 Percent_2 0.5
+	setcycle 19 Trial_Type Incongurent
+	setcycle 19 Data_Type Dataset
+	setcycle 19 Data_Type_Sort 1
+	setcycle 19 Correct_Response BIGGER
+	setcycle 20 ID_1 4
+	setcycle 20 ID_changer 1
+	setcycle 20 ID_2 4
+	setcycle 20 Size_1 303
+	setcycle 20 Radius_1 151.5
+	setcycle 20 Pitch_1 667
+	setcycle 20 Percent_1 0.5
+	setcycle 20 Size_2 333
+	setcycle 20 Radius_2 166.5
+	setcycle 20 New_Pitch 1000
+	setcycle 20 Diff 333
+	setcycle 20 Pitch_2 334
+	setcycle 20 Percent_2 0.5
+	setcycle 20 Trial_Type Incongurent
+	setcycle 20 Data_Type Dataset
+	setcycle 20 Data_Type_Sort 1
+	setcycle 20 Correct_Response BIGGER
+	setcycle 21 ID_1 2
+	setcycle 21 ID_changer 1
+	setcycle 21 ID_2 5
+	setcycle 21 Size_1 333
+	setcycle 21 Radius_1 166.5
+	setcycle 21 Pitch_1 1000
+	setcycle 21 Percent_1 0.53
+	setcycle 21 Size_2 366
+	setcycle 21 Radius_2 183
+	setcycle 21 New_Pitch 1500
+	setcycle 21 Diff 500
+	setcycle 21 Pitch_2 500
+	setcycle 21 Percent_2 0.53
+	setcycle 21 Trial_Type Incongurent
+	setcycle 21 Data_Type Dataset
+	setcycle 21 Data_Type_Sort 1
+	setcycle 21 Correct_Response BIGGER
+	shuffle
+	sortby Data_Type_Sort
+	run trial
+
+define sequence ExperimentSequence
+	set flush_keyboard yes
+	set description "Runs a number of items in sequence"
+	run reset_feedback always
+	run ExperimentLoop always
+
+define sketchpad Fixation
+	set duration 500
+	set description "Displays stimuli"
+	draw fixdot color=white name=Fixation_dot show_if=always style=default x=0.0 y=4.0 z_index=0
+
+define sketchpad Intermediate
+	set duration 1000
+	set description "Displays stimuli"
+
+define synth Pitch_1
+	set volume "[Percent_1]"
+	set pan 0
+	set osc sine
+	set length 500
+	set freq "[Pitch_1]"
+	set duration sound
+	set description "A basic sound synthesizer"
+	set decay 5
+	set attack 0
+
+define synth Pitch_2
+	set volume "[Percent_2]"
+	set pan 0
+	set osc sine
+	set length 500
+	set freq "[Pitch_2]"
+	set duration sound
+	set description "A basic sound synthesizer"
+	set decay 5
+	set attack 0
+
+define sketchpad Stimulus
+	set duration 0
+	set description "Displays stimuli"
+	draw rect color=white fill=1 h=160 name=SMALLER penwidth=1 show_if=always w=320 x=-672 y=-396 z_index=4
+	draw rect color=white fill=1 h=160 name=BIGGER penwidth=1 show_if=always w=-320 x=672 y=-396 z_index=4
+	draw fixdot color=white show_if=always style=default x=0 y=356 z_index=0
+	draw textline center=1 color=Black font_bold=yes font_family=mono font_italic=no font_size=36 html=yes show_if=always text=SMALLER x=-510 y=-310 z_index=0
+	draw textline center=1 color=Black font_bold=yes font_family=mono font_italic=no font_size=36 html=yes show_if=always text="BIGGER<br />" x=510 y=-290 z_index=0
+
+define sketchpad Visual_1
+	set duration 500
+	set description "Displays stimuli"
+	draw circle color="#737373" fill=1 penwidth=1 r="[Radius_1]" show_if=always x=0 y=0 z_index=0
+
+define sketchpad Visual_2
+	set duration 500
+	set description "Displays stimuli"
+	draw circle color="#737373" fill=1 penwidth=1 r="[Radius_2]" show_if=always x=0 y=0 z_index=0
+
+define sketchpad end_of_experiment
+	set start_response_interval no
+	set duration keypress
+	set description "A sketchpad notifying the participant that the experiment is finished"
+	draw textline center=1 color=white font_bold=no font_family=mono font_italic=no font_size=18 html=yes show_if=always text="Press any key to exit" x=0 y=0 z_index=0
+
+define sequence experiment
+	set flush_keyboard yes
+	set description "The main sequence of the experiment"
+	run instructions always
+	run ExperimentSequence always
+	run end_of_experiment always
+
+define sketchpad instructions
+	set start_response_interval no
+	set duration keypress
+	set description "A sketchpad containing the instructions for the participant"
+	draw textline center=1 color=white font_bold=no font_family=mono font_italic=no font_size=18 html=yes show_if=always text="Welcome! You will be presented with two pictures at a time.<br /><br />One of the two pictures is painted by an selfproclaimed painter, the other is painted by Dall*e or a child.<br /><br />Your task is to click on the picture painted by an adult human as fast as possible.<br /><br /><br />Easy right?<br /><br />Press any key to begin!" x=0 y=0 z_index=0
+
+define logger logger
+	set description "Logs experimental data"
+	set auto_log yes
+
+define mousetrap_response mouse
+	__warning_message__
+	draw textline text="Please start moving" x=0 y=0
+	__end__
+	set update_feedback no
+	set timeout infinite
+	set start_coordinates "0;356"
+	set skip_item no
+	set sketchpad Stimulus
+	set save_trajectories yes
+	set reset_mouse yes
+	set number_of_buttons 2
+	set mouse_buttons_allowed "left_button;right_button"
+	set max_initiation_time 1000
+	set logging_resolution 10
+	set description "Tracks mouse movements"
+	set correct_button "[Correct_Response]"
+	set click_required yes
+	set check_initiation_time yes
+	set button4 ""
+	set button3 ""
+	set button2 SMALLER
+	set button1 BIGGER
+	set boundaries "upper=no lower=no left=no right=no"
+
+define reset_feedback reset_feedback
+	set description "Resets the feedback variables, such as 'avg_rt' and 'acc'"
+
+define sequence trial
+	set flush_keyboard yes
+	set description "Runs a number of items in sequence"
+	run Fixation always
+	run Pitch_1 always
+	run Visual_1 always
+	run Intermediate always
+	run Pitch_2 always
+	run Visual_2 always
+	run Stimulus always
+	run mouse always
+	run logger always
+
