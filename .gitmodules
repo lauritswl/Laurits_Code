@@ -1,0 +1,3 @@
+[submodule "Experiments/Experiments/CogSci-Eye-tracking-lab-E2022"]
+	path = Experiments/Experiments/CogSci-Eye-tracking-lab-E2022
+	url = https://github.com/lauritswl/CogSci-Eye-tracking-lab-E2022.git
