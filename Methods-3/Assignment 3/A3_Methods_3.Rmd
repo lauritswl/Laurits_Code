@@ -12,7 +12,11 @@ output: html_document
 Use the meta-analysis reported in Parola et al (2020), create a simulated dataset with 100 matched pairs of schizophrenia and controls, each participant producing 10 repeated measures (10 trials with their speech recorded). for each of these "recordings" (data points) produce 10 acoustic measures: 6 from the meta-analysis, 4 with just random noise. Do the same for a baseline dataset including only 10 noise variables. Tip: see the slides for the code. 
 #### Loading packages
 ```{r}
+pacman::p_load(tidyverse, brms, bayesplot, rstanarm, msm, cmdstanr, recipes, caret, tidytext, tidymodels, DALEXtra)
 pacman::p_load(tidyverse, brms, bayesplot, rstanarm, msm, cmdstanr, tidymodels, readr, broom.mixed, dotwhisker, multilevelmod, recipes, caret, klaR)
+pacman::p_load(caret)
+pacman::p_load(DALEX, DALEXtra)
+pacman::p_load(tidytext)
 set.seed(123)
 ```
 
@@ -32,8 +36,7 @@ TrialSD <- 0.5
 Error <- 0.2
 ```
 
-### 03/11 13.54 bedste skud
-
+### Data simulation (LL)
 ```{r}
 Trial <- rep(1:10,100)
 id_SZ <- rep(101:200, each=10)
@@ -114,7 +117,7 @@ SZ_S <- data.frame(
          v10 = NA)
 ```
 
-```{r rnorm for SZ}
+```{r}
 for (c in 1:1000){
   SZ_S[c,4:13] <- Map(rnorm, n = 1, mean = SkepticEffectMean/2, sd = IndividualSD)
 }
@@ -125,78 +128,80 @@ for (c in 1:1000){
 Skeptic <- rbind(SZ_S,CON_S)
 ```
 
+### Plotting simulated data (TS)
+##### Plotting the variables for the informed simulation
 ```{r}
 informed <- informed %>% 
   mutate(Condition = as.factor(Condition))
 
 plot1 <- informed %>% 
-  ggplot(aes(v1, fill = Condition)) + geom_density()
+  ggplot(aes(v1, fill = Condition)) + geom_density() + xlim(-4,4)
 
 plot2 <- informed %>% 
-  ggplot(aes(v2, fill = Condition)) + geom_density()
+  ggplot(aes(v2, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot3 <- informed %>% 
-  ggplot(aes(V3, fill = Condition)) + geom_density()
+  ggplot(aes(V3, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot4 <- informed %>% 
-  ggplot(aes(v4, fill = Condition)) + geom_density()
+  ggplot(aes(v4, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot5 <- informed %>% 
-  ggplot(aes(v5, fill = Condition)) + geom_density()
+  ggplot(aes(v5, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot6 <- informed %>% 
-  ggplot(aes(v6, fill = Condition)) + geom_density()
+  ggplot(aes(v6, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot7 <- informed %>% 
-  ggplot(aes(v7, fill = Condition)) + geom_density()
+  ggplot(aes(v7, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot8 <- informed %>% 
-  ggplot(aes(v8, fill = Condition)) + geom_density()
+  ggplot(aes(v8, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot9 <- informed %>% 
-  ggplot(aes(v9, fill = Condition)) + geom_density()
+  ggplot(aes(v9, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot10 <- informed %>% 
-  ggplot(aes(v10, fill = Condition)) + geom_density()
+  ggplot(aes(v10, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 gridExtra::grid.arrange(plot1, plot2, plot3, plot4, plot5, plot6, plot7, plot8, plot9, plot10 )
 
 
 ```
-
+##### Plotting the variables for the skeptic simulations
 ```{r}
 Skeptic <- Skeptic %>% 
   mutate(Condition = as.factor(Condition))
 
 plot1S <- Skeptic %>% 
-  ggplot(aes(v1, fill = Condition)) + geom_density()
+  ggplot(aes(v1, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot2S <- Skeptic %>% 
-  ggplot(aes(v2, fill = Condition)) + geom_density()
+  ggplot(aes(v2, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot3S <- Skeptic %>% 
-  ggplot(aes(V3, fill = Condition)) + geom_density()
+  ggplot(aes(V3, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot4S <- Skeptic %>% 
-  ggplot(aes(v4, fill = Condition)) + geom_density()
+  ggplot(aes(v4, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot5S <- Skeptic %>% 
-  ggplot(aes(v5, fill = Condition)) + geom_density()
+  ggplot(aes(v5, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot6S <- Skeptic %>% 
-  ggplot(aes(v6, fill = Condition)) + geom_density()
+  ggplot(aes(v6, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot7S <- Skeptic %>% 
-  ggplot(aes(v7, fill = Condition)) + geom_density()
+  ggplot(aes(v7, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot8S <- Skeptic %>% 
-  ggplot(aes(v8, fill = Condition)) + geom_density()
+  ggplot(aes(v8, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot9S <- Skeptic %>% 
-  ggplot(aes(v9, fill = Condition)) + geom_density()
+  ggplot(aes(v9, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 plot10S <- Skeptic %>% 
-  ggplot(aes(v10, fill = Condition)) + geom_density()
+  ggplot(aes(v10, fill = Condition)) + geom_density()+ xlim(-4,4)
 
 gridExtra::grid.arrange(plot1S, plot2S, plot3S, plot4S, plot5S, plot6S, plot7S, plot8S, plot9S, plot10S )
 
@@ -209,9 +214,8 @@ On the two simulated datasets (separately) build a machine learning pipeline: i)
 
 Bonus question: replace the bayesian multilevel regression with a different algorithm, e.g. SVM or random forest (but really, anything you'd like to try).
 
-### i) create a data budget (e.g. balanced training and test sets)
+### i) create a data budget (EL)
 
-Creating a new pair column
 ```{r}
 informed <- informed %>% 
   mutate(pair=ID) %>% 
@@ -241,7 +245,7 @@ Skeptic_test <- subset(Skeptic, !pair %in% sample2)
 # subset conditioned by if column is in the sample column 
 ```
 
-### ii) pre-process the data (e.g. scaling the features);
+### ii) pre-process the data (TS & NV)
 ```{r}
 rec_informed <- informed_train %>% 
   recipe(Condition ~ .) %>% 
@@ -285,7 +289,7 @@ skeptic_test_s <- skeptic_test_s %>%
 
 ```
 
-iii) fit and assess a classification algorithm on the training data (e.g. Bayesian multilevel logistic regression); 
+### iii) fit and assess a classification algorithm on the training data (TS & EL)
 
 ```{r}
 informed_train_s %>% 
@@ -379,7 +383,7 @@ gridExtra::grid.arrange(p1s, p2s)
 ```
 
 
-iv) assess performance on the test set; 
+### iv) assess performance on the test set (NV)
 ```{r}
 # AVERAGE CONFUSION MATRIX PREDICTIONS
 pacman::p_load(caret)
@@ -446,51 +450,9 @@ confusionMatrix(data = skeptic_test_s1$Predictions0,
                 reference = skeptic_test_s1$Condition)
 ```
 
-Confusion Matrices with uncertainty - DOESN'T WORK :((
-```{r}
-# Setting up the data frame
-ConfProb <- tibble(
-  expand_grid(
-    sample = seq(1600),
-    setup = c("informed", "skeptic"),
-    type = c("training", "test")
-  )
-)
-# Informed probabilities
-testProbInf <- inv_logit_scaled(posterior_linpred(pitch_m0, summary = F))
-trainProbInf <- inv_logit_scaled(posterior_linpred(pitch_m0, summary = F,
-                                                newdata = informed_test_s,
-                                                allow_new_levels = T))
 
-# Skeptic probabilities
-testProbSkep <- inv_logit_scaled(posterior_linpred(pitch_m0_s, summary = F))
-trainProbSkep <- inv_logit_scaled(posterior_linpred(pitch_m0_s, summary = F,
-                                                newdata = skeptic_test_s,
-                                                allow_new_levels = T))
 
-# for (i in seq(1600)) {
-#   informed_train_s$Predictions0 <- as.factor(ifelse(trainProbInf[i,] > 0.5, "Schizophrenia",
-#                                                     "Control"))
-#   informed_test_s$Predictions0 <- as.factor(ifelse(testProbInf[i,] > 0.5, "Schizophrenia",
-#                                                     "Control"))
-#   
-#   ConfProb$Accuracy[ConfProb$sample == i & ConfProb$setup == "informed" & ConfProb$type ==
-#                       "training"] <- accuracy(informed_train_s, truth = Condition, estimate =
-#                                                 Predictions0)[, ".estimate"]
-#   ConfProb$Accuracy[ConfProb$sample == i & ConfProb$setup == "informed" & ConfProb$type ==
-#                       "test"] <- accuracy(informed_test_s, truth = Condition, estimate =
-#                                                 Predictions0)[, ".estimate"]
-#   ConfProb$Accuracy[ConfProb$sample == i & ConfProb$setup == "skeptic" & ConfProb$type ==
-#                       "training"] <- accuracy(skeptic_train_s, truth = Condition, estimate =
-#                                                 Predictions0)[, ".estimate"]
-#   ConfProb$Accuracy[ConfProb$sample == i & ConfProb$setup == "skeptic" & ConfProb$type ==
-#                       "test"] <- accuracy(skeptic_test_s, truth = Condition, estimate =
-#                                                 Predictions0)[, ".estimate"]
-# }
-                                                
-```
-
-v) discuss whether performance is as expected and feature importance is as expected.
+### v) discuss whether performance is as expected and feature importance is as expected (EL & LL)
 
 ### Accuracy
 ```{r}
@@ -537,11 +499,28 @@ explainer_lm_skep <- explain_tidymodels(
   lable = "logReg", 
   verbose = FALSE
 )
+```
 
-#Plotting feature importance
-explainer_lm %>% model_parts() %>% plot(show_boxplots = FALSE) + ggtitle("Feature importance informed")
 
-explainer_lm_skep %>% model_parts() %>% plot(show_boxplots = FALSE) + ggtitle("Feature importance skeptic")
+```{r}
+set.seed(123)
+# One for informed
+explainer_lm %>% model_parts() %>% 
+  filter(variable != "pair" & # Discard the mentioned variables
+           variable != "Trial" &
+           variable != "ID" &
+           variable != "Condition_Schizophrenia" &
+           variable != "Condition") %>% 
+  plot(show_boxplots = FALSE) + ggtitle("Feature importance informed")
+
+# One for skeptic
+explainer_lm_skep %>% model_parts() %>% 
+  filter(variable != "pair" &
+           variable != "Trial" &
+           variable != "ID" &
+           variable != "Condition_Schizophrenia" &
+           variable != "Condition") %>% 
+  plot(show_boxplots = FALSE) + ggtitle("Feature importance skeptic")
 ```
 
 
@@ -551,9 +530,9 @@ model_profile_lm1 <- model_profile(explainer_lm, type = "partial", variables = c
 
 model_profile_lm1_skep <- model_profile(explainer_lm_skep, type = "partial", variables = c("v1", "v2", "V3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"))
 
-plot(model_profile_lm1, variables = c("v1", "v2", "V3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"))
+plot(model_profile_lm1, variables = c("v1", "v2", "V3", "v4", "v5", "v6", "v7", "v8", "v9", "v10")) + ylim(0,1)
 
-plot(model_profile_lm1_skep, variables = c("v1", "v2", "V3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"))
+plot(model_profile_lm1_skep, variables = c("v1", "v2", "V3", "v4", "v5", "v6", "v7", "v8", "v9", "v10")) + ylim(0,1)
 ```
 
 
@@ -564,9 +543,7 @@ plot(model_profile_lm1_skep, variables = c("v1", "v2", "V3", "v4", "v5", "v6", "
 Download the empirical dataset from brightspace and apply your ML pipeline to the new data, adjusting where needed. Warning: in the simulated data set we only had 10 features, now you have many more! Such is the life of the ML practitioner. Consider the impact a higher number of features will have on your ML inference, and decide whether you need to cut down the number of features before running the pipeline (or alternatively expand the pipeline to add feature selection).
 
 
-
 ```{r}
-
 d <- read_csv("Ass3_empiricalData1.csv")
 pacman::p_load(tidytext)
 
@@ -584,8 +561,37 @@ test_empirical <- subset(d_num, !PatID %in% sample_emp)
 
 ```
 
-MODEL WITH 3 PCA
+
+
+### Cumulative variance explained by the number of components (NV)
 ```{r}
+# preparing the recipe for 
+rec_PCA <- recipe(~., data = train_empirical) %>% 
+  update_role(PatID, new_role = "ID") %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_numeric_predictors(), threshold = 1) %>% 
+  prep(training = train_empirical, retain = T)
+  
+# PLOTTING THE CUMULATIVE VARIANCE EXPLAINED BY NUMBER OF COMPONENTS
+# extracting variance explained by the different components
+PCA_variance <- as.tibble(t(summary(rec_PCA$steps[[2]]$res)$importance))
+
+# adding number of PCA column
+PCA_variance <- rowid_to_column(PCA_variance, "Number of component")
+
+# plotting the cumulative variance explained
+PCA_variance %>% 
+  ggplot(aes(x = `Number of component`, y = `Cumulative Proportion`)) +
+  geom_line(col = "blue") + theme_classic() + xlim(0, 100) +
+  labs(title = "Cumulative variance explained by components")+
+  ylab("Cumulative explained variance")
+
+# it looks like most of the variance is captured by the first 9 components
+```
+### Principal compenent analysis (NV & EL)
+Model with 3 PCAs
+```{r}
+# Setting up a recipe using 3 PCAs
 rec_PCA3 <- recipe(~., data = train_empirical) %>% 
   update_role(PatID, new_role = "ID") %>% 
   step_normalize(all_numeric_predictors()) %>% 
@@ -599,8 +605,6 @@ pca_rec_test3 <- bake(rec_PCA3, new_data = test_empirical)
 # Applying the model
 real_f0 <- bf(Condition ~ 1 + .)
 
-get_prior(real_f0, pca_rec_train3, family = bernoulli)
-
 real_p0 <- c(
   prior(normal(0, 1), class = Intercept),
   prior(normal(0, 0.3), class = b))
@@ -613,17 +617,14 @@ real_m0_3 <- brm(
   sample_prior = T,
   backend = "cmdstanr",
   chains = 2,
-  cores = 6,
+  cores = 8,
   threads = threading(2),
   control = list(adapt_delta = 0.9,
                  max_treedepth = 20),
-  stan_model_args = list(stanc_options = list("O1"))
-)
-
-
+  stan_model_args = list(stanc_options = list("O1")))
 ```
 
-MODEL WITH 6 PCA
+Model with 6 PCAs
 ```{r}
 rec_PCA6 <- recipe(~., data = train_empirical) %>% 
   update_role(PatID, new_role = "ID") %>% 
@@ -636,24 +637,8 @@ pca_rec_train6 <- juice(rec_PCA6)
 pca_rec_test6 <- bake(rec_PCA6, new_data = test_empirical)
 
 # Applying the model
-
-
-real_m0_6 <- brm(
-  real_f0,
-  pca_rec_train6,
-  family = bernoulli,
-  prior = real_p0,
-  sample_prior = T,
-  backend = "cmdstanr",
-  chains = 2,
-  cores = 6,
-  threads = threading(2),
-  control = list(adapt_delta = 0.9,
-                 max_treedepth = 20),
-  stan_model_args = list(stanc_options = list("O1"))
-)
-
-
+real_m0_6 <- update(
+  real_m0_3, newdata = pca_rec_train6)
 ```
 
 MODEL WITH 9 PCA
@@ -669,31 +654,13 @@ pca_rec_train9 <- juice(rec_PCA9)
 pca_rec_test9 <- bake(rec_PCA9, new_data = test_empirical)
 
 # Applying the model
-
-
-real_p0_9 <- c(
-  prior(normal(0, 1), class = Intercept),
-  prior(normal(0, 0.3), class = b))
-
-real_m0_9 <- brm(
-  real_f0,
-  pca_rec_train9,
-  family = bernoulli,
-  prior = real_p0,
-  sample_prior = T,
-  backend = "cmdstanr",
-  chains = 2,
-  cores = 6,
-  threads = threading(2),
-  control = list(adapt_delta = 0.9,
-                 max_treedepth = 20),
-  stan_model_args = list(stanc_options = list("O1"))
-)
+real_m0_9 <- update(
+  real_m0_3, newdata = pca_rec_train9)
 
 # Expanding the recipe into a data frame, which is needed for it to be plotted below:
-tidied_pca <- tidy(pca_prep, 2)
+tidied_pca <- tidy(rec_PCA9, 2)
 
-# Exploring results of PCA. These look at the top 5 components.
+# Exploring results of PCA. These look at the top 9 components.
 tidied_pca %>% 
   filter(component %in% paste0("PC", 1:9)) %>% 
   mutate(component = fct_inorder(component)) %>% 
@@ -702,7 +669,7 @@ tidied_pca %>%
   facet_wrap(~ component, nrow = 1) +
   labs(y = NULL)
 
-# Ranked results of PCA. Looks at the top five components, and inside these it ranks the most influential variables (If they are blue they are positive for the component, red negative.)
+# Ranked results of PCA. Looks at the five most influencial components, and inside these it ranks the most influential variables (If they are blue they are positive for the component, red negative.)
 tidied_pca %>% 
   filter(component %in% paste0("PC", 1:9)) %>% 
   group_by(component) %>% 
@@ -717,22 +684,21 @@ tidied_pca %>%
     x = "Absolute value of contribution",
     y = NULL, fill = "Positive?"
   )
-
 ```
 
 ### Evaluation
 ```{r}
-# AVERAGE CONFUSION MATRIX PREDICTIONS
-pacman::p_load(caret)
-
+# Evaluation using predictions
+# setting up a function for evaluating:
 pca_eval<- function(test_data, model){
 
-eval_m0_3 <- test_data
-eval_m0_3$PredictionPerc0 <- predict(model, newdata = test_data, allow_new_levels = T)[, 1]
-eval_m0_3$Predictions0[eval_m0_3$PredictionPerc0 > 0.5] <- "Schizophrenia"
-eval_m0_3$Predictions0[eval_m0_3$PredictionPerc0 <= 0.5] <- "Control"
+eval <- test_data
+eval$Predictions0 <- NA
+eval$PredictionPerc0 <- predict(model, newdata = test_data, allow_new_levels = T)[, 1]
+eval$Predictions0[eval$PredictionPerc0 > 0.5] <- "Schizophrenia"
+eval$Predictions0[eval$PredictionPerc0 <= 0.5] <- "Control"
 
-eval_m0_3 <- eval_m0_3 %>% 
+eval1 <- eval %>% 
   mutate(
     Condition =
       ifelse(Condition=="CT", "Control", "Schizophrenia"),
@@ -740,6 +706,7 @@ eval_m0_3 <- eval_m0_3 %>%
     Predictions0 = as.factor(Predictions0)
       
   )
+return(eval1)
 }
 
 eval_pca3 <- pca_eval(pca_rec_test3, real_m0_3)
@@ -747,21 +714,25 @@ eval_pca3 <- pca_eval(pca_rec_test3, real_m0_3)
 eval_pca6 <- pca_eval(pca_rec_test6, real_m0_6)
 
 eval_pca9 <- pca_eval(pca_rec_test9, real_m0_9)
-
-
 ```
 
-Creating some confusion matrixes to visualize accuracy of models
+Creating some confusion matrices to visualize accuracy of models
 ```{r}
+# setting up a function for confusion matrices
 ConfMatrix <- function(testdata){
 confusionMatrix(data = testdata$Predictions0,
                 reference = testdata$Condition)
 }
 
+#3 PCAs
 ConfMatrix(eval_pca3)
 
+#6 PCAs
 ConfMatrix(eval_pca6)
 
+#9 PCAs
 ConfMatrix(eval_pca9)
 ```
+
+
 
