@@ -16,3 +16,5 @@ Assignment, CSV's and Markdowns used in methods 3
 
 ### 100 Days of Code
 I'm learning python through a online course, follow along :)
+Actuall projects will be stored in the projects repotory
+See: [[00 Index]]

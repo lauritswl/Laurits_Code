@@ -1,0 +1,129 @@
+---
+title: "PercAct_Exam"
+author: "Laurits Lyngbæk"
+date: "2022-12-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Cleaning data
+### Read packages
+
+```{r - load packages}
+pacman::p_load(tidyverse,mousetrap,readbulk)
+```
+
+
+### Load packages as mousetrap_object
+```{r}
+df <- read_opensesame(directory = "./Data/", extension = ".csv") #Load all files in folder with .csv ending
+```
+
+```{r - non-mousetracking dataframe}
+# checking percent correct:
+df %>%
+    group_by(subject_nr) %>% 
+    summarise(round(sum(correct)/22*100))
+```
+
+```{r check incorrect}
+# What trial type is the errors from
+df %>% 
+    filter(correct == 0) %>% 
+    select(Trial_Type, count_logger)
+
+
+df %>% 
+    filter(correct == 0) %>% 
+    group_by(Trial_Type) %>% 
+    summarize(n())
+
+
+#What sizes are most often mistaken.
+df %>% 
+    filter(correct == 0) %>% 
+    mutate(size_diff = abs(Size_1-Size_2)) %>% 
+    group_by(size_diff) %>% 
+    summarize(n())
+
+```
+
+
+```{r}
+#Converting only the correct raw mouse tracking data into mousetrap data
+df <-subset(df, df$correct == 1)
+df <-subset(df, df$Data_Type_Sort == 1)
+mt<- mt_import_mousetrap(df) #tranform df to mousetrap object
+rm(df) #clean variables
+```
+
+
+```{r}
+#excluding the initation times for the trials
+mt <- mt_exclude_initiation(mt)
+#mirror-symmetric mapping of movements
+mt <- mt_remap_symmetric(mt, use = "trajectories", remap_xpos = "left")
+#Aligning the starting and end position of all the trials (Might need to change this one -
+ #it space-normalizes the data.)
+mt <- mt_align_start_end(mt)
+```
+
+```{r}
+#standardizing the time variable for the trials into chunks in order for the data to be comparable between trials
+mt <- mt_time_normalize(mt)
+#calculating new coloun for the metrics (MAD, AD) used below
+mt <- mt_measures(mt)
+```
+
+The metrics are as follows:
+  -> MAD describes the maximum absolute deviation from the direct path connecting the start and end point of the trajectory 
+    (if going in a straight line). Meaning that a value of 0 would be ideal.
+    
+  -> AD denotes the average deviation from the the direct path.
+  
+  -> AUC denotes the area under the curve; meaning the geometric area between the actual trajectory and the direct path where the       area below the the direct path has been subtracted
+  
+  -> xpos_flips denotes the average number of directional changes along the x-axis
+  
+  -> RT denotes the average response time for the trials
+
+```{r}
+# The function is used to aggregate mouse movement data from multiple trials or subjects into a single dataframe.
+mt_aggregate(
+  mt, use = "measures",
+  use_variables = c("MAD", "AD", "AUC", "xpos_flips", "RT"),
+  use2_variables = "Trial_Type",
+  subject_id = "subject_nr"
+)
+
+
+```
+```{r}
+#plotting all trial curves with colors based on the condition
+mt_plot(
+  mt, use = "tn_trajectories",
+  x = "xpos", y = "ypos", color = "Trial_Type") +
+  theme_minimal() + labs(title = "Aligned time-normalized mouse-tracking data", 
+                           x = "Position (x)",
+                           y = "Position (y)")
+```
+
+```{r}
+  #plotting the aggregated curves for the two conditions
+mt_plot_aggregate(
+  mt, use = "tn_trajectories",
+  x = "xpos", y = "ypos", color = "Trial_Type",
+  subject_id = "subject_nr") +
+  theme_minimal() + labs(title = "Aligned aggregated time-normalized mouse trajectories", 
+                           x = "Position (x)",
+                           y = "Position (y)")
+```
+```{r}
+
+
+
+```
+

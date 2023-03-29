@@ -1,4 +1,4 @@
-# Index of Statistical Rethinking
+ # Index of Statistical Rethinking
 Notes to the [Statistical Rethinking 2nd edition](https://github.com/Booleans/statistical-rethinking).
 A book that uses more computer code than formal mathematics, and is more a course in r baysiean than a refrence book.
 [Code snippets](http://xcelab.net/rmpubs/sr2/code.txt) from the book.
@@ -27,6 +27,13 @@ Two [YouTube lectures](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-
 
 ## Chapter 1: The Golem of Prague
 Introduces the [[The Golem of Prague]] - [[Tools of model engineering]] - [[Causal Inference]]
+
+
+
+
+
+
+
 
 
 

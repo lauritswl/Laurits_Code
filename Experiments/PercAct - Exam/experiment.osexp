@@ -3,7 +3,7 @@ API: 2.1
 OpenSesame: 3.3.12
 Platform: nt
 ---
-set width 1600
+set width 3000
 set uniform_coordinates yes
 set title "Extended template"
 set subject_parity even
@@ -19,16 +19,16 @@ set psychopy_waitblanking yes
 set psychopy_monitor testMonitor
 set mouse_backend psycho
 set keyboard_backend psycho
-set height 900
+set height 2000
 set fullscreen no
 set form_clicks no
 set foreground white
 set font_underline no
-set font_size 18
+set font_size 42
 set font_italic no
 set font_family mono
 set font_bold no
-set experiment_path "C:/Users/lauri/Desktop/Local_Git/Laurits_Code/Experiments/Mousetracking"
+set experiment_path "C:\\Users\\lauri\\OneDrive - Aarhus universitet\\Skrivebord\\Local_Git\\Laurits_Code_\\Experiments\\PercAct - Exam"
 set disable_garbage_collection yes
 set description "A template containing a practice and an experimental phase"
 set coordinates uniform
@@ -49,138 +49,138 @@ define loop ExperimentLoop
 	set continuous yes
 	set break_if_on_first yes
 	set break_if never
-	setcycle 0 ID_1 5
+	setcycle 0 ID_1 3
 	setcycle 0 ID_changer -1
-	setcycle 0 ID_2 4
-	setcycle 0 Size_1 366
-	setcycle 0 Radius_1 183
-	setcycle 0 Pitch_1 1500
-	setcycle 0 Percent_1 0.53
-	setcycle 0 Size_2 333
-	setcycle 0 Radius_2 167
-	setcycle 0 New_Pitch 1000
-	setcycle 0 Diff 500
-	setcycle 0 Pitch_2 1000
-	setcycle 0 Percent_2 0.5
+	setcycle 0 ID_2 2
+	setcycle 0 Size_1 303
+	setcycle 0 Radius_1 152
+	setcycle 0 Pitch_1 667
+	setcycle 0 Percent_1 0.51
+	setcycle 0 Size_2 275
+	setcycle 0 Radius_2 138
+	setcycle 0 New_Pitch 444
+	setcycle 0 Diff 223
+	setcycle 0 Pitch_2 444
+	setcycle 0 Percent_2 0.53
 	setcycle 0 Trial_Type Control
 	setcycle 0 Data_Type Training
 	setcycle 0 Data_Type_Sort 0
 	setcycle 0 Correct_Response SMALLER
-	setcycle 1 ID_1 4
+	setcycle 1 ID_1 5
 	setcycle 1 ID_changer -1
-	setcycle 1 ID_2 3
-	setcycle 1 Size_1 333
-	setcycle 1 Radius_1 166.5
-	setcycle 1 Pitch_1 1000
-	setcycle 1 Percent_1 0.5
-	setcycle 1 Size_2 303
-	setcycle 1 Radius_2 151.5
-	setcycle 1 New_Pitch 667
-	setcycle 1 Diff 333
-	setcycle 1 Pitch_2 667
-	setcycle 1 Percent_2 0.51
+	setcycle 1 ID_2 4
+	setcycle 1 Size_1 366
+	setcycle 1 Radius_1 183
+	setcycle 1 Pitch_1 1500
+	setcycle 1 Percent_1 0.53
+	setcycle 1 Size_2 333
+	setcycle 1 Radius_2 166.5
+	setcycle 1 New_Pitch 1000
+	setcycle 1 Diff 500
+	setcycle 1 Pitch_2 1000
+	setcycle 1 Percent_2 0.5
 	setcycle 1 Trial_Type Control
 	setcycle 1 Data_Type Training
 	setcycle 1 Data_Type_Sort 0
 	setcycle 1 Correct_Response SMALLER
-	setcycle 2 ID_1 3
+	setcycle 2 ID_1 4
 	setcycle 2 ID_changer 1
-	setcycle 2 ID_2 4
-	setcycle 2 Size_1 303
-	setcycle 2 Radius_1 151.5
-	setcycle 2 Pitch_1 667
-	setcycle 2 Percent_1 0.51
-	setcycle 2 Size_2 333
-	setcycle 2 Radius_2 166.5
-	setcycle 2 New_Pitch 1000
-	setcycle 2 Diff -333
-	setcycle 2 Pitch_2 1000
-	setcycle 2 Percent_2 0.5
+	setcycle 2 ID_2 5
+	setcycle 2 Size_1 333
+	setcycle 2 Radius_1 166.5
+	setcycle 2 Pitch_1 1000
+	setcycle 2 Percent_1 0.5
+	setcycle 2 Size_2 366
+	setcycle 2 Radius_2 183
+	setcycle 2 New_Pitch 1500
+	setcycle 2 Diff -500
+	setcycle 2 Pitch_2 1500
+	setcycle 2 Percent_2 0.53
 	setcycle 2 Trial_Type Control
 	setcycle 2 Data_Type Training
 	setcycle 2 Data_Type_Sort 0
 	setcycle 2 Correct_Response BIGGER
-	setcycle 3 ID_1 5
+	setcycle 3 ID_1 6
 	setcycle 3 ID_changer 1
-	setcycle 3 ID_2 6
-	setcycle 3 Size_1 366
-	setcycle 3 Radius_1 183
-	setcycle 3 Pitch_1 1500
-	setcycle 3 Percent_1 0.53
-	setcycle 3 Size_2 403
-	setcycle 3 Radius_2 201.5
-	setcycle 3 New_Pitch 2250
-	setcycle 3 Diff -750
-	setcycle 3 Pitch_2 2250
-	setcycle 3 Percent_2 0.48
+	setcycle 3 ID_2 7
+	setcycle 3 Size_1 403
+	setcycle 3 Radius_1 201.5
+	setcycle 3 Pitch_1 2250
+	setcycle 3 Percent_1 0.48
+	setcycle 3 Size_2 443
+	setcycle 3 Radius_2 221.5
+	setcycle 3 New_Pitch 3375
+	setcycle 3 Diff -1125
+	setcycle 3 Pitch_2 3375
+	setcycle 3 Percent_2 0.47
 	setcycle 3 Trial_Type Control
 	setcycle 3 Data_Type Training
 	setcycle 3 Data_Type_Sort 0
 	setcycle 3 Correct_Response BIGGER
-	setcycle 4 ID_1 6
+	setcycle 4 ID_1 5
 	setcycle 4 ID_changer -1
-	setcycle 4 ID_2 5
-	setcycle 4 Size_1 403
-	setcycle 4 Radius_1 201.5
-	setcycle 4 Pitch_1 2250
-	setcycle 4 Percent_1 0.48
-	setcycle 4 Size_2 366
-	setcycle 4 Radius_2 183
-	setcycle 4 New_Pitch 1500
-	setcycle 4 Diff 750
-	setcycle 4 Pitch_2 1500
-	setcycle 4 Percent_2 0.53
+	setcycle 4 ID_2 4
+	setcycle 4 Size_1 366
+	setcycle 4 Radius_1 183
+	setcycle 4 Pitch_1 1500
+	setcycle 4 Percent_1 0.53
+	setcycle 4 Size_2 333
+	setcycle 4 Radius_2 166.5
+	setcycle 4 New_Pitch 1000
+	setcycle 4 Diff 500
+	setcycle 4 Pitch_2 1000
+	setcycle 4 Percent_2 0.5
 	setcycle 4 Trial_Type Control
 	setcycle 4 Data_Type Dataset
 	setcycle 4 Data_Type_Sort 1
 	setcycle 4 Correct_Response SMALLER
-	setcycle 5 ID_1 6
+	setcycle 5 ID_1 4
 	setcycle 5 ID_changer -1
-	setcycle 5 ID_2 5
-	setcycle 5 Size_1 403
-	setcycle 5 Radius_1 201.5
-	setcycle 5 Pitch_1 2250
-	setcycle 5 Percent_1 0.48
-	setcycle 5 Size_2 366
-	setcycle 5 Radius_2 183
-	setcycle 5 New_Pitch 1500
-	setcycle 5 Diff 750
-	setcycle 5 Pitch_2 1500
-	setcycle 5 Percent_2 0.53
+	setcycle 5 ID_2 3
+	setcycle 5 Size_1 333
+	setcycle 5 Radius_1 166.5
+	setcycle 5 Pitch_1 1000
+	setcycle 5 Percent_1 0.5
+	setcycle 5 Size_2 303
+	setcycle 5 Radius_2 151.5
+	setcycle 5 New_Pitch 667
+	setcycle 5 Diff 333
+	setcycle 5 Pitch_2 667
+	setcycle 5 Percent_2 0.51
 	setcycle 5 Trial_Type Control
 	setcycle 5 Data_Type Dataset
 	setcycle 5 Data_Type_Sort 1
 	setcycle 5 Correct_Response SMALLER
-	setcycle 6 ID_1 2
+	setcycle 6 ID_1 3
 	setcycle 6 ID_changer -1
-	setcycle 6 ID_2 1
-	setcycle 6 Size_1 275
-	setcycle 6 Radius_1 137.5
-	setcycle 6 Pitch_1 444
-	setcycle 6 Percent_1 0.53
-	setcycle 6 Size_2 250
-	setcycle 6 Radius_2 125
-	setcycle 6 New_Pitch 296
-	setcycle 6 Diff 148
-	setcycle 6 Pitch_2 296
-	setcycle 6 Percent_2 0.54
+	setcycle 6 ID_2 2
+	setcycle 6 Size_1 303
+	setcycle 6 Radius_1 151.5
+	setcycle 6 Pitch_1 667
+	setcycle 6 Percent_1 0.51
+	setcycle 6 Size_2 275
+	setcycle 6 Radius_2 137.5
+	setcycle 6 New_Pitch 444
+	setcycle 6 Diff 223
+	setcycle 6 Pitch_2 444
+	setcycle 6 Percent_2 0.53
 	setcycle 6 Trial_Type Control
 	setcycle 6 Data_Type Dataset
 	setcycle 6 Data_Type_Sort 1
 	setcycle 6 Correct_Response SMALLER
-	setcycle 7 ID_1 2
+	setcycle 7 ID_1 4
 	setcycle 7 ID_changer 1
-	setcycle 7 ID_2 3
-	setcycle 7 Size_1 275
-	setcycle 7 Radius_1 137.5
-	setcycle 7 Pitch_1 444
-	setcycle 7 Percent_1 0.53
-	setcycle 7 Size_2 303
-	setcycle 7 Radius_2 151.5
-	setcycle 7 New_Pitch 667
-	setcycle 7 Diff -223
-	setcycle 7 Pitch_2 667
-	setcycle 7 Percent_2 0.51
+	setcycle 7 ID_2 5
+	setcycle 7 Size_1 333
+	setcycle 7 Radius_1 166.5
+	setcycle 7 Pitch_1 1000
+	setcycle 7 Percent_1 0.5
+	setcycle 7 Size_2 366
+	setcycle 7 Radius_2 183
+	setcycle 7 New_Pitch 1500
+	setcycle 7 Diff -500
+	setcycle 7 Pitch_2 1500
+	setcycle 7 Percent_2 0.53
 	setcycle 7 Trial_Type Control
 	setcycle 7 Data_Type Dataset
 	setcycle 7 Data_Type_Sort 1
@@ -202,36 +202,36 @@ define loop ExperimentLoop
 	setcycle 8 Data_Type Dataset
 	setcycle 8 Data_Type_Sort 1
 	setcycle 8 Correct_Response BIGGER
-	setcycle 9 ID_1 2
+	setcycle 9 ID_1 5
 	setcycle 9 ID_changer 1
-	setcycle 9 ID_2 3
-	setcycle 9 Size_1 275
-	setcycle 9 Radius_1 137.5
-	setcycle 9 Pitch_1 444
+	setcycle 9 ID_2 6
+	setcycle 9 Size_1 366
+	setcycle 9 Radius_1 183
+	setcycle 9 Pitch_1 1500
 	setcycle 9 Percent_1 0.53
-	setcycle 9 Size_2 303
-	setcycle 9 Radius_2 151.5
-	setcycle 9 New_Pitch 667
-	setcycle 9 Diff -223
-	setcycle 9 Pitch_2 667
-	setcycle 9 Percent_2 0.51
+	setcycle 9 Size_2 403
+	setcycle 9 Radius_2 201.5
+	setcycle 9 New_Pitch 2250
+	setcycle 9 Diff -750
+	setcycle 9 Pitch_2 2250
+	setcycle 9 Percent_2 0.48
 	setcycle 9 Trial_Type Control
 	setcycle 9 Data_Type Dataset
 	setcycle 9 Data_Type_Sort 1
 	setcycle 9 Correct_Response BIGGER
-	setcycle 10 ID_1 4
+	setcycle 10 ID_1 6
 	setcycle 10 ID_changer -1
-	setcycle 10 ID_2 3
-	setcycle 10 Size_1 333
-	setcycle 10 Radius_1 166.5
-	setcycle 10 Pitch_1 1000
-	setcycle 10 Percent_1 0.5
-	setcycle 10 Size_2 303
-	setcycle 10 Radius_2 151.5
-	setcycle 10 New_Pitch 667
-	setcycle 10 Diff -333
-	setcycle 10 Pitch_2 334
-	setcycle 10 Percent_2 0.51
+	setcycle 10 ID_2 5
+	setcycle 10 Size_1 403
+	setcycle 10 Radius_1 201.5
+	setcycle 10 Pitch_1 2250
+	setcycle 10 Percent_1 0.48
+	setcycle 10 Size_2 366
+	setcycle 10 Radius_2 183
+	setcycle 10 New_Pitch 1500
+	setcycle 10 Diff -750
+	setcycle 10 Pitch_2 750
+	setcycle 10 Percent_2 0.53
 	setcycle 10 Trial_Type Congurent
 	setcycle 10 Data_Type Dataset
 	setcycle 10 Data_Type_Sort 1
@@ -253,36 +253,36 @@ define loop ExperimentLoop
 	setcycle 11 Data_Type Dataset
 	setcycle 11 Data_Type_Sort 1
 	setcycle 11 Correct_Response SMALLER
-	setcycle 12 ID_1 4
+	setcycle 12 ID_1 2
 	setcycle 12 ID_changer -1
-	setcycle 12 ID_2 3
-	setcycle 12 Size_1 333
-	setcycle 12 Radius_1 166.5
-	setcycle 12 Pitch_1 1000
-	setcycle 12 Percent_1 0.5
-	setcycle 12 Size_2 303
-	setcycle 12 Radius_2 151.5
-	setcycle 12 New_Pitch 667
-	setcycle 12 Diff -333
-	setcycle 12 Pitch_2 334
-	setcycle 12 Percent_2 0.51
+	setcycle 12 ID_2 1
+	setcycle 12 Size_1 275
+	setcycle 12 Radius_1 137.5
+	setcycle 12 Pitch_1 444
+	setcycle 12 Percent_1 0.53
+	setcycle 12 Size_2 250
+	setcycle 12 Radius_2 125
+	setcycle 12 New_Pitch 296
+	setcycle 12 Diff -148
+	setcycle 12 Pitch_2 148
+	setcycle 12 Percent_2 0.54
 	setcycle 12 Trial_Type Congurent
 	setcycle 12 Data_Type Dataset
 	setcycle 12 Data_Type_Sort 1
 	setcycle 12 Correct_Response SMALLER
-	setcycle 13 ID_1 5
+	setcycle 13 ID_1 4
 	setcycle 13 ID_changer 1
-	setcycle 13 ID_2 6
-	setcycle 13 Size_1 366
-	setcycle 13 Radius_1 183
-	setcycle 13 Pitch_1 1500
-	setcycle 13 Percent_1 0.53
-	setcycle 13 Size_2 403
-	setcycle 13 Radius_2 201.5
-	setcycle 13 New_Pitch 2250
-	setcycle 13 Diff 750
-	setcycle 13 Pitch_2 3000
-	setcycle 13 Percent_2 0.48
+	setcycle 13 ID_2 5
+	setcycle 13 Size_1 333
+	setcycle 13 Radius_1 166.5
+	setcycle 13 Pitch_1 1000
+	setcycle 13 Percent_1 0.5
+	setcycle 13 Size_2 366
+	setcycle 13 Radius_2 183
+	setcycle 13 New_Pitch 1500
+	setcycle 13 Diff 500
+	setcycle 13 Pitch_2 2000
+	setcycle 13 Percent_2 0.53
 	setcycle 13 Trial_Type Congurent
 	setcycle 13 Data_Type Dataset
 	setcycle 13 Data_Type_Sort 1
@@ -304,121 +304,121 @@ define loop ExperimentLoop
 	setcycle 14 Data_Type Dataset
 	setcycle 14 Data_Type_Sort 1
 	setcycle 14 Correct_Response BIGGER
-	setcycle 15 ID_1 4
+	setcycle 15 ID_1 2
 	setcycle 15 ID_changer 1
-	setcycle 15 ID_2 5
-	setcycle 15 Size_1 333
-	setcycle 15 Radius_1 166.5
-	setcycle 15 Pitch_1 1000
-	setcycle 15 Percent_1 0.5
-	setcycle 15 Size_2 366
-	setcycle 15 Radius_2 183
-	setcycle 15 New_Pitch 1500
-	setcycle 15 Diff 500
-	setcycle 15 Pitch_2 2000
-	setcycle 15 Percent_2 0.53
+	setcycle 15 ID_2 3
+	setcycle 15 Size_1 275
+	setcycle 15 Radius_1 137.5
+	setcycle 15 Pitch_1 444
+	setcycle 15 Percent_1 0.53
+	setcycle 15 Size_2 303
+	setcycle 15 Radius_2 151.5
+	setcycle 15 New_Pitch 667
+	setcycle 15 Diff 223
+	setcycle 15 Pitch_2 890
+	setcycle 15 Percent_2 0.51
 	setcycle 15 Trial_Type Congurent
 	setcycle 15 Data_Type Dataset
 	setcycle 15 Data_Type_Sort 1
 	setcycle 15 Correct_Response BIGGER
-	setcycle 16 ID_1 6
+	setcycle 16 ID_1 5
 	setcycle 16 ID_changer -1
-	setcycle 16 ID_2 3
-	setcycle 16 Size_1 333
-	setcycle 16 Radius_1 166.5
-	setcycle 16 Pitch_1 1000
-	setcycle 16 Percent_1 0.48
-	setcycle 16 Size_2 303
-	setcycle 16 Radius_2 151.5
-	setcycle 16 New_Pitch 667
-	setcycle 16 Diff -333
-	setcycle 16 Pitch_2 1333
-	setcycle 16 Percent_2 0.51
+	setcycle 16 ID_2 1
+	setcycle 16 Size_1 275
+	setcycle 16 Radius_1 137.5
+	setcycle 16 Pitch_1 444
+	setcycle 16 Percent_1 0.53
+	setcycle 16 Size_2 250
+	setcycle 16 Radius_2 125
+	setcycle 16 New_Pitch 296
+	setcycle 16 Diff -148
+	setcycle 16 Pitch_2 592
+	setcycle 16 Percent_2 0.54
 	setcycle 16 Trial_Type Incongurent
 	setcycle 16 Data_Type Dataset
 	setcycle 16 Data_Type_Sort 1
 	setcycle 16 Correct_Response SMALLER
-	setcycle 17 ID_1 3
+	setcycle 17 ID_1 5
 	setcycle 17 ID_changer -1
-	setcycle 17 ID_2 5
-	setcycle 17 Size_1 403
-	setcycle 17 Radius_1 201.5
-	setcycle 17 Pitch_1 2250
-	setcycle 17 Percent_1 0.51
-	setcycle 17 Size_2 366
-	setcycle 17 Radius_2 183
-	setcycle 17 New_Pitch 1500
-	setcycle 17 Diff -750
-	setcycle 17 Pitch_2 3000
-	setcycle 17 Percent_2 0.53
+	setcycle 17 ID_2 4
+	setcycle 17 Size_1 366
+	setcycle 17 Radius_1 183
+	setcycle 17 Pitch_1 1500
+	setcycle 17 Percent_1 0.53
+	setcycle 17 Size_2 333
+	setcycle 17 Radius_2 166.5
+	setcycle 17 New_Pitch 1000
+	setcycle 17 Diff -500
+	setcycle 17 Pitch_2 2000
+	setcycle 17 Percent_2 0.5
 	setcycle 17 Trial_Type Incongurent
 	setcycle 17 Data_Type Dataset
 	setcycle 17 Data_Type_Sort 1
 	setcycle 17 Correct_Response SMALLER
-	setcycle 18 ID_1 3
+	setcycle 18 ID_1 4
 	setcycle 18 ID_changer -1
-	setcycle 18 ID_2 2
-	setcycle 18 Size_1 303
-	setcycle 18 Radius_1 151.5
-	setcycle 18 Pitch_1 667
-	setcycle 18 Percent_1 0.51
-	setcycle 18 Size_2 275
-	setcycle 18 Radius_2 137.5
-	setcycle 18 New_Pitch 444
-	setcycle 18 Diff -223
-	setcycle 18 Pitch_2 890
-	setcycle 18 Percent_2 0.53
+	setcycle 18 ID_2 4
+	setcycle 18 Size_1 366
+	setcycle 18 Radius_1 183
+	setcycle 18 Pitch_1 1500
+	setcycle 18 Percent_1 0.5
+	setcycle 18 Size_2 333
+	setcycle 18 Radius_2 166.5
+	setcycle 18 New_Pitch 1000
+	setcycle 18 Diff -500
+	setcycle 18 Pitch_2 2000
+	setcycle 18 Percent_2 0.5
 	setcycle 18 Trial_Type Incongurent
 	setcycle 18 Data_Type Dataset
 	setcycle 18 Data_Type_Sort 1
 	setcycle 18 Correct_Response SMALLER
-	setcycle 19 ID_1 3
+	setcycle 19 ID_1 5
 	setcycle 19 ID_changer 1
-	setcycle 19 ID_2 4
-	setcycle 19 Size_1 303
-	setcycle 19 Radius_1 151.5
-	setcycle 19 Pitch_1 667
-	setcycle 19 Percent_1 0.51
-	setcycle 19 Size_2 333
-	setcycle 19 Radius_2 166.5
-	setcycle 19 New_Pitch 1000
-	setcycle 19 Diff 333
-	setcycle 19 Pitch_2 334
-	setcycle 19 Percent_2 0.5
+	setcycle 19 ID_2 5
+	setcycle 19 Size_1 333
+	setcycle 19 Radius_1 166.5
+	setcycle 19 Pitch_1 1000
+	setcycle 19 Percent_1 0.53
+	setcycle 19 Size_2 366
+	setcycle 19 Radius_2 183
+	setcycle 19 New_Pitch 1500
+	setcycle 19 Diff 500
+	setcycle 19 Pitch_2 500
+	setcycle 19 Percent_2 0.53
 	setcycle 19 Trial_Type Incongurent
 	setcycle 19 Data_Type Dataset
 	setcycle 19 Data_Type_Sort 1
 	setcycle 19 Correct_Response BIGGER
-	setcycle 20 ID_1 4
+	setcycle 20 ID_1 3
 	setcycle 20 ID_changer 1
-	setcycle 20 ID_2 4
-	setcycle 20 Size_1 303
-	setcycle 20 Radius_1 151.5
-	setcycle 20 Pitch_1 667
-	setcycle 20 Percent_1 0.5
-	setcycle 20 Size_2 333
-	setcycle 20 Radius_2 166.5
-	setcycle 20 New_Pitch 1000
-	setcycle 20 Diff 333
-	setcycle 20 Pitch_2 334
-	setcycle 20 Percent_2 0.5
+	setcycle 20 ID_2 6
+	setcycle 20 Size_1 366
+	setcycle 20 Radius_1 183
+	setcycle 20 Pitch_1 1500
+	setcycle 20 Percent_1 0.51
+	setcycle 20 Size_2 403
+	setcycle 20 Radius_2 201.5
+	setcycle 20 New_Pitch 2250
+	setcycle 20 Diff 750
+	setcycle 20 Pitch_2 750
+	setcycle 20 Percent_2 0.48
 	setcycle 20 Trial_Type Incongurent
 	setcycle 20 Data_Type Dataset
 	setcycle 20 Data_Type_Sort 1
 	setcycle 20 Correct_Response BIGGER
-	setcycle 21 ID_1 2
+	setcycle 21 ID_1 4
 	setcycle 21 ID_changer 1
-	setcycle 21 ID_2 5
-	setcycle 21 Size_1 333
-	setcycle 21 Radius_1 166.5
-	setcycle 21 Pitch_1 1000
-	setcycle 21 Percent_1 0.53
-	setcycle 21 Size_2 366
-	setcycle 21 Radius_2 183
-	setcycle 21 New_Pitch 1500
-	setcycle 21 Diff 500
-	setcycle 21 Pitch_2 500
-	setcycle 21 Percent_2 0.53
+	setcycle 21 ID_2 4
+	setcycle 21 Size_1 303
+	setcycle 21 Radius_1 151.5
+	setcycle 21 Pitch_1 667
+	setcycle 21 Percent_1 0.5
+	setcycle 21 Size_2 333
+	setcycle 21 Radius_2 166.5
+	setcycle 21 New_Pitch 1000
+	setcycle 21 Diff 333
+	setcycle 21 Pitch_2 334
+	setcycle 21 Percent_2 0.5
 	setcycle 21 Trial_Type Incongurent
 	setcycle 21 Data_Type Dataset
 	setcycle 21 Data_Type_Sort 1
@@ -436,11 +436,68 @@ define sequence ExperimentSequence
 define sketchpad Fixation
 	set duration 500
 	set description "Displays stimuli"
-	draw fixdot color=white name=Fixation_dot show_if=always style=default x=0.0 y=4.0 z_index=0
+	draw fixdot color=white name=Fixation_dot show_if=always style=default x=0 y=4 z_index=0
 
 define sketchpad Intermediate
 	set duration 1000
 	set description "Displays stimuli"
+
+define inline_script Participant_data
+	set description "Executes Python code"
+	___run__
+	def my_form_validator():
+	
+	    """Checks whether both the gender and age fields have been filled out"""
+	
+	    return var.gender != u'no' and var.age != u'' and var.senses != u'no'
+	
+	
+	def filter_digits(ch):
+	
+	    """Allows only digit characters as input"""
+	
+	    return ch in u'0123456789'
+	
+	
+	# Define all widgets
+	button_ok = Button(text=u'Ok')
+	# Gender widgets
+	label_gender = Label(u'Your Gender')
+	checkbox_male = Checkbox(text=u'Male', group=u'gender', var=u'gender')
+	checkbox_female = Checkbox(text=u'Female', group=u'gender', var=u'gender')
+	checkbox_other = Checkbox(text=u'Other', group=u'gender', var=u'gender')
+	# Senses widgets
+	label_senses = Label(u'Do you have (corrected to)\nnormal sight and hearing?')
+	checkbox_yes_sense = Checkbox(text=u'Yes', group=u'senses', var=u'senses')
+	checkbox_no_sense = Checkbox(text=u'No', group=u'senses', var=u'senses')
+	
+	
+	label_age = Label(u'Your Age')
+	# Specify a key filter so that only digits are accepted as text input
+	input_age = TextInput(stub=u'Insert answer here:', var=u'age', key_filter=filter_digits)
+	# Build the form. Specify a validator function to make sure that the form is
+	# completed.
+	my_form = Form( validator=my_form_validator, cols=4, rows=4)
+	
+	my_form.set_widget(label_gender, (0, 0))
+	my_form.set_widget(checkbox_male, (1, 0))
+	my_form.set_widget(checkbox_female, (2, 0))
+	my_form.set_widget(checkbox_other, (3, 0))
+	
+	my_form.set_widget(label_senses, (0, 1))
+	my_form.set_widget(checkbox_yes_sense, (1, 1))
+	my_form.set_widget(checkbox_no_sense, (2, 1))
+	
+	my_form.set_widget(label_age, (0, 2))
+	my_form.set_widget(input_age, (1, 2), colspan=2)
+	
+	
+	
+	my_form.set_widget(button_ok, (0, 3))
+	
+	my_form._exec()
+	__end__
+	set _prepare ""
 
 define synth Pitch_1
 	set volume "[Percent_1]"
@@ -492,6 +549,8 @@ define sketchpad end_of_experiment
 define sequence experiment
 	set flush_keyboard yes
 	set description "The main sequence of the experiment"
+	run Participant_data always
+	run new_form_consent always
 	run instructions always
 	run ExperimentSequence always
 	run end_of_experiment always
@@ -500,7 +559,7 @@ define sketchpad instructions
 	set start_response_interval no
 	set duration keypress
 	set description "A sketchpad containing the instructions for the participant"
-	draw textline center=1 color=white font_bold=no font_family=mono font_italic=no font_size=18 html=yes show_if=always text="Welcome! You will be presented with two pictures at a time.<br /><br />One of the two pictures is painted by an selfproclaimed painter, the other is painted by Dall*e or a child.<br /><br />Your task is to click on the picture painted by an adult human as fast as possible.<br /><br /><br />Easy right?<br /><br />Press any key to begin!" x=0 y=0 z_index=0
+	draw textline center=1 color=white font_bold=yes font_family=mono font_italic=no font_size=32 html=yes show_if=always text="Welcome!<br /><br /><br />This experiment is a size determination experiment. You will first see one circle, when the circle dissapears, you will be presented a second circle after one second.<br /><br />Your task is to determine if the second circle is BIGGER or SMALLER than the first circle, and click on the correct answer as fast as possible.<br /><br />You will be hearing some tones in the headphones as you do the task. You dont have to act on the sound you hear. Only what you see.<br /><br />Good Luck!<br /><br />Press any key on the keyboard to begin!" x=0 y=0 z_index=0
 
 define logger logger
 	set description "Logs experimental data"
@@ -519,7 +578,7 @@ define mousetrap_response mouse
 	set reset_mouse yes
 	set number_of_buttons 2
 	set mouse_buttons_allowed "left_button;right_button"
-	set max_initiation_time 1000
+	set max_initiation_time 2000
 	set logging_resolution 10
 	set description "Tracks mouse movements"
 	set correct_button "[Correct_Response]"
@@ -530,6 +589,38 @@ define mousetrap_response mouse
 	set button2 SMALLER
 	set button1 BIGGER
 	set boundaries "upper=no lower=no left=no right=no"
+
+define form_consent new_form_consent
+	set timeout infinite
+	set spacing 10
+	set rows "1;4;1;1"
+	set only_render no
+	set margins "50;50;50;50"
+	set form_title "Consent form"
+	__form_text__
+	You are about to participate in an experiment.
+	
+	This experiment poses no known risks to your health and your name will not be associated with the findings.
+	
+	Upon completion of your participation in this study you will be provided with a brief explanation of the question this study addresses.
+	
+	If you have any questions not addressed by this consent form, please do not hesitate to ask.
+	
+	You can stop at any time during experiment if you feel uncomfortable.
+	__end__
+	set description "A simple consent form"
+	set decline_text "Do not participate"
+	set decline_message "You need to accept the consent form to participate!"
+	set cols "2;2"
+	set checkbox_text "I have read and understood the information shown above"
+	set accept_text "Participate!"
+	set _theme gray
+	widget 0 0 2 1 label text="[form_title]"
+	widget 0 1 2 1 label center=no text="[form_text]"
+	widget 0 2 2 1 checkbox text="[checkbox_text]" var=checkbox_status
+	widget 0 3 1 1 button text="[accept_text]" var=accept_status
+	widget 1 3 1 1 button text="[decline_text]"
+
 
 define reset_feedback reset_feedback
 	set description "Resets the feedback variables, such as 'avg_rt' and 'acc'"

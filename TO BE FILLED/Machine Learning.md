@@ -17,3 +17,16 @@ $S = {X_1, X_4, X_6, X_p, X_2}$
 
 $X_2$ is false positive feature, but how do we avoid having this feature:
 ### Random Forests:
+
+
+
+
+
+
+### Weights and Biases
+A single experiment is a "run"
+
+Three principles of an ideal ML workflow
+*quikly iritterate*
+*reproduce* 
+*collabaration*

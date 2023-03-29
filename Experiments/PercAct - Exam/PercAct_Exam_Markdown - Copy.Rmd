@@ -1,0 +1,286 @@
+---
+title: "PercAct_Exam"
+author: "Laurits Lyngbæk"
+date: "2022-12-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Cleaning data
+### Read packages
+
+```{r - load packages}
+pacman::p_load(tidyverse,mousetrap,readbulk,lme4, stats)
+
+```
+
+
+### Load packages as mousetrap_object
+```{r}
+df <- read_opensesame(directory = "./Data/", extension = ".csv") #Load all files in folder with .csv ending
+```
+
+```{r - non-mousetracking dataframe}
+#Creating new condition names
+
+df <- df %>%  
+    mutate(Trial_Type = ifelse(Trial_Type == "Incongurent", "Incongruent", Trial_Type)) %>% 
+    mutate(Trial_Type = ifelse(Trial_Type == "Congurent", "Exaggerated", Trial_Type)) %>% 
+    mutate(Trial_Type = ifelse(Trial_Type == "Control", "Congruent", Trial_Type))
+
+df_wrong <- df %>% 
+    filter(correct == 0)
+
+
+
+# checking percent correct:
+df %>% 
+    group_by(subject_nr) %>% 
+    count(gender) %>% 
+    ungroup() %>% 
+    count(gender)
+
+
+df$Trial_Type
+df %>% 
+    select(gender, age) 
+
+
+df_mean <- tapply(df$age, df$gender, mean)
+df_sd <- tapply(df$age, df$gender, sd)
+
+df_mean
+df_sd
+```
+
+
+```{r check incorrect}
+df %>% 
+    filter(correct == 0) %>%
+    # filter(Data_Type != "Training") %>% 
+    select(Trial_Type, count_logger) %>% 
+    group_by(Trial_Type) %>% 
+    summarise(n())
+
+
+1-(26+10+15)/594
+```
+
+
+```{r check incorrect}
+df %>% 
+    filter(correct == 0) %>% 
+    mutate(size_diff = abs(Size_1-Size_2)) %>% 
+    group_by(size_diff) %>% 
+    summarize(n())
+```
+
+
+```{r}
+#Converting only the correct raw mouse tracking data into mousetrap data
+incorrect_mt <-  mt_import_mousetrap(df)
+
+df <-subset(df, df$correct == 1)
+df <-subset(df, df$Data_Type != "Training")
+mt<- mt_import_mousetrap(df) #tranform df to mousetrap object
+
+```
+
+
+```{r}
+#excluding the initation times for the trials
+mt <- mt_exclude_initiation(mt)
+#mirror-symmetric mapping of movements
+mt <- mt_remap_symmetric(mt, use = "trajectories", remap_xpos = "left")
+#Aligning the starting and end position of all the trials (Might need to change this one -
+ #it space-normalizes the data.)
+mt <- mt_align_start_end(mt)
+```
+
+```{r}
+#standardizing the time variable for the trials into chunks in order for the data to be comparable between trials
+mt <- mt_time_normalize(mt)
+#calculating new coloumn for the metrics (MAD, AD) used below
+mt <- mt_measures(mt)
+```
+
+
+The metrics are as follows:
+  -> MAD describes the maximum absolute deviation from the direct path connecting the start and end point of the trajectory 
+    (if going in a straight line). Meaning that a value of 0 would be ideal.
+    
+  -> AD denotes the average deviation from the the direct path.
+  
+  -> AUC denotes the area under the curve; meaning the geometric area between the actual trajectory and the direct path where the       area below the the direct path has been subtracted
+  
+  -> xpos_flips denotes the average number of directional changes along the x-axis
+  
+  -> RT denotes the average response time for the trials
+
+
+# Visualisation
+
+```{r}
+# The function is used to aggregate mouse movement data from multiple trials or subjects into a single dataframe.
+mt_aggregate(
+  mt, use = "measures",
+  use_variables = c("MAD", "AD", "AUC", "xpos_flips", "RT"),
+  use2_variables = "Trial_Type",
+  subject_id = "subject_nr"
+)
+
+
+```
+```{r}
+#plotting all trial curves with colors based on the condition
+mt_plot(
+  mt, use = "tn_trajectories",
+  x = "xpos", y = "ypos", color = "Trial_Type") +
+  theme_minimal() + labs(title = "Aligned time-normalized mouse-tracking data", 
+                           x = "Position (x)",
+                           y = "Position (y)")
+```
+
+```{r}
+  #plotting the aggregated curves for the two conditions
+mt_plot_aggregate(
+  mt, use = "tn_trajectories",
+  x = "xpos", y = "ypos", color = "Trial_Type",
+  subject_id = "subject_nr") +
+  theme_minimal() + labs(title = "Aligned aggregated time-normalized mouse trajectories", 
+                           x = "Position (x)",
+                           y = "Position (y)")
+```
+```{r}
+mt_for_bind <- mt$measures %>% 
+    select(-initiation_time, -mt_id) # remove duplicate data_collumns
+visualisation <- cbind(mt_for_bind, mt$data) #bind data into one dataframe
+visualisation_test_count <- visualisation %>% mutate(count = count_mouse+1)
+rm(mt_for_bind) #remove extra intermediate dataframe
+
+# create plot
+RT_boxplot <- visualisation %>% 
+  ggplot(aes(y=RT, x=Trial_Type, fill=Trial_Type)) +
+    geom_boxplot()+
+    geom_violin(alpha = .5)
+ 
+
+# compute lower and upper whiskers
+ylim1 = boxplot.stats(visualisation$RT)$stats[c(1, 5)]
+
+# scale y limits based on ylim1
+RT_boxplot + coord_cartesian(ylim = ylim1*1.05)
+
+
+# ## Investigating columns with the same name
+# mt$measures$mt_id == mt$data$mt_id
+# mt$measures$initiation_time == mt$data$initiation_time                           
+# 
+# cbind(mt$measures$initiation_time, mt$data$initiation_time)
+```
+
+
+```{r}
+# create plot
+Correct_boxplot <- visualisation %>% 
+  ggplot(aes(y=correct, x=Trial_Type, fill=Trial_Type)) +
+    geom_histogram()+
+    geom_violin(alpha = .5)
+ 
+
+# compute lower and upper whiskers
+
+
+# scale y limits based on ylim1
+Correct_boxplot + coord_cartesian(ylim = ylim1*1.05)
+```
+```{r}
+mean_RT_df <- visualisation %>%
+  group_by(Trial_Type) %>%
+  summarize(mean=mean(RT),SD=sd(RT))
+
+visualisation %>% 
+    ggplot(aes(x=RT, fill=Trial_Type)) +
+    geom_density(alpha = .5)+
+    xlim(300,1500)+
+    geom_vline(data = mean_RT_df, aes(xintercept = mean, 
+                                       color = Trial_Type), size=1, alpha = .3)+
+    geom_text(data = mean_RT_df, aes(x=mean+ 400, 
+                                     label=paste0("Mean:\n",round(mean,2)), y=0.0015))+
+        geom_text(data = mean_RT_df, aes(x=mean + 380, 
+                                     label=paste0("SD:\n",round(SD,2)), y=0.0013))+
+    facet_wrap(~ Trial_Type)+
+    theme_bw()+
+    labs(title = "Density plots for reactiontime in ms", 
+                           x = "Reactiontime in ms",
+                           y = "Density")
+
+```
+
+```{r fitted line}
+wrong_df <- df %>% 
+    select(correct == 0)
+
+
+
+```
+
+
+
+```{r - modelling}
+mGaus <- lmer(RT ~ Trial_Type + (1 | subject_nr)+ (1 | subject_nr)
+              , data=visualisation)
+
+
+mLog <- glmer(RT ~ Trial_Type + (1 | subject_nr)
+              , family=gaussian( link="log")
+              , data=visualisation)
+
+
+
+
+
+
+summary(mLog)
+anova(mGaus, mLog)
+?isSingular
+
+
+```
+
+```{r}
+wrong_answers_plot <- df_wrong %>% 
+    ggplot(aes(x = count_mouse, fill = Trial_Type)) +
+    geom_density(alpha = .5, trim=TRUE)+
+    theme_bw()+ labs(title = "Density plot of wrong answers for each condition", 
+                           x = "Trial",
+                           y = "Density")
+
+
+wrong_answers_plot
+
+```
+
+
+
+```{r}
+
+df$correct <- as.logical(df$correct)
+
+
+
+binomial <- glmer(correct ~ count_mouse*Trial_Type + (1 | subject_nr),
+              data=df,
+              family = "binomial")
+
+
+summary(binomial)
+
+```
+
+
+
+

@@ -1,14 +1,14 @@
 {
   "main": {
-    "id": "aa698290c37e5895",
+    "id": "db12870232dec283",
     "type": "split",
     "children": [
       {
-        "id": "61f73b284b41fcf5",
+        "id": "c13a402be580656d",
         "type": "tabs",
         "children": [
           {
-            "id": "d7f89e6de8e31515",
+            "id": "e4a7727abf9e1b50",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -20,33 +20,45 @@
             }
           },
           {
-            "id": "e36e01ba7a86378f",
+            "id": "1609b4c0d2953a09",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "R/Statistical Rethinking/README.md",
+                "file": "Graphical causal models.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "aa663b76b3d02a1a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "19b53f413d185c5e",
+    "id": "bbc87968fb12b41d",
     "type": "split",
     "children": [
       {
-        "id": "366ee141fdaf70ba",
+        "id": "7208cb237277b3e0",
         "type": "tabs",
         "children": [
           {
-            "id": "48abf29337e2e412",
+            "id": "225f2103f05a37a2",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -56,12 +68,12 @@
             }
           },
           {
-            "id": "fb6cb2c18922a5de",
+            "id": "dd55120707f4b077",
             "type": "leaf",
             "state": {
               "type": "search",
               "state": {
-                "query": "golem",
+                "query": "THEOREM",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -71,7 +83,7 @@
             }
           },
           {
-            "id": "d23c45e05c480b1a",
+            "id": "486474d1ecd62aa3",
             "type": "leaf",
             "state": {
               "type": "starred",
@@ -82,23 +94,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 297.5129165649414
+    "width": 300
   },
   "right": {
-    "id": "6b10c4882b01445d",
+    "id": "d05bc1fc40053743",
     "type": "split",
     "children": [
       {
-        "id": "a78cbb9dd68fbfb3",
+        "id": "164d357353c9e145",
         "type": "tabs",
         "children": [
           {
-            "id": "3546aa9b64a9493b",
+            "id": "7b8303e2a87b2b2a",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "R/Statistical Rethinking/README.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -110,19 +122,19 @@
             }
           },
           {
-            "id": "4aee6807dee26731",
+            "id": "03dc9844fc12bde3",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "R/Statistical Rethinking/README.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
             }
           },
           {
-            "id": "a3d45b552db7c087",
+            "id": "673c25a069c864e0",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -133,12 +145,12 @@
             }
           },
           {
-            "id": "777fcbb2d480a54a",
+            "id": "bbac51374a933a97",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "R/Statistical Rethinking/README.md"
+                "file": "README.md"
               }
             }
           }
@@ -149,17 +161,60 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "e36e01ba7a86378f",
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "aa663b76b3d02a1a",
   "lastOpenFiles": [
-    "R/Statistical Rethinking/Markdowns/Causal Inference.md",
-    "Statistical Rethinking Vocabulary.md",
-    "R/Statistical Rethinking/README.md",
-    "R/Statistical Rethinking/Markdowns/Tools of model engineering.md",
-    "R/Statistical Rethinking/Markdowns/Scientific model.md",
-    "R/Statistical Rethinking/Markdowns/Statistical models.md",
-    "R/Statistical Rethinking/Markdowns/Bayesian data analysis.md",
-    "R/Statistical Rethinking/Markdowns/The Golem of Prague.md",
-    "Untitled.md",
-    "Images/Pasted image 20221201175152.png"
+    "Python/00 Index.md",
+    "Python/1-10/Conditional Statements.md",
+    "Images/nested if_else2.png",
+    "Images/Nested if_else.png",
+    "Images/Multiple if statements.png",
+    "Images/If_else.png",
+    "Images/elif_flow.png",
+    "Images/Python+Syntax+Cheat+Sheet+Booklet.pdf",
+    "Python/21-30/Files, Directories and Paths.md",
+    "Python/21-30",
+    "Python/21-22",
+    "Python/New folder",
+    "Python/11-20/Files, Directories and Paths.md",
+    "Python/11-20/Event Listeners.md",
+    "Python/11-20/Higher Order Functions.md",
+    "Python/11-20/Tuples.md",
+    "Python/11-20/Object Oriented Programming (OOP).md",
+    "Python/11-20/Importing modules.md",
+    "Python/11-20/Creating your own class.md",
+    "Python/11-20/Constructor.md",
+    "Python/11-20",
+    "README.md",
+    "Python/1-10",
+    "Graphical causal models.md",
+    "Python/1-10/Docstrings.md",
+    "Python/1-10/Dictionary.md",
+    "Python/1-10/Defining a function.md",
+    "Python/1-10/Data Types.md",
+    "Python/1-10/Used functions.md",
+    "Python/1-10/Random Module.md",
+    "Python/1-10/Print and syntax.md",
+    "Python/1-10/Modules.md",
+    "Python/1-10/Mathematical Operations.md",
+    "Python/1-10/Loop.md",
+    "Python/1-10/Logical Operators.md",
+    "Python/1-10/List.md",
+    "Python/1-10/Karel the Robot.md",
+    "Images/Bayes_theorem_image.png",
+    "Untitled.canvas",
+    "Images/Hypotheses are not models.png",
+    "Images/How_to_draw_the_bayesian_owl.png",
+    "Images/How_to_draw_an_owl.png",
+    "Images/Following_with_youtube.png"
   ]
 }
