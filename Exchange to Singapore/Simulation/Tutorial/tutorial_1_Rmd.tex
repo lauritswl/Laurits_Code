@@ -1,0 +1,318 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Tutorial\_1\_Simulation},
+  pdfauthor={Laurits},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Tutorial\_1\_Simulation}
+\author{Laurits}
+\date{2024-02-01}
+
+\begin{document}
+\maketitle
+
+\hypertarget{tutorial-1}{%
+\section{Tutorial 1}\label{tutorial-1}}
+
+\hypertarget{q1}{%
+\subsection{Q1}\label{q1}}
+
+\hypertarget{a-i}{%
+\subsubsection{a) i}\label{a-i}}
+
+We return Y when x greater than or equal to the CDF off y. 1. We check
+if \$x \le \sum{p_0} \textless=\textgreater{} x
+\le P(Y=0)\textless=\textgreater{} x \le 0.2 \$ if this is not true we
+check for the second k. 2. We check if \$x \le \sum{p_1}
+\textless=\textgreater{} x \le P(Y=0)+P(Y=1)\textless=\textgreater{} x
+\le 0.2 + 0.3 \textless=\textgreater{} x \le 0.5 \$ if this is not true
+we check for the third k. 3. We check if \$x \le \sum{p_2}
+\textless=\textgreater{} x
+\le P(Y=0)+P(Y=1)+P(Y=2)\textless=\textgreater{} x \le 0.2 + 0.3 + 0.4
+\textless=\textgreater{} x \le 0.9 \$ if this is not true we check for
+the fourth k. 4. We check if \$x \le \sum{p_3} \textless=\textgreater{}
+x \le P(Y=0)+P(Y=1)+P(Y=2)+P(Y=3)\textless=\textgreater{} x \le 0.2 +
+0.3 + 0.4 + 0.1\textless=\textgreater{} x \le 1 \$
+
+If any of these statements were true, the algorithm ends, by returning
+the Y. Statement 4 will always be true.
+
+\hypertarget{a-ii}{%
+\subsubsection{a) ii}\label{a-ii}}
+
+The probability that Y = 2 is 0.4
+
+\hypertarget{b-i}{%
+\subsubsection{b) i}\label{b-i}}
+
+The interval of X on which we will get Y = k is:
+\[(\sum^{y}_{k=0}{p_{k-1}}:\sum^{y}_{k=0}{p_{k}}]\]
+
+\hypertarget{b-ii}{%
+\subsubsection{b) ii}\label{b-ii}}
+
+So, the probability is:
+\[\frac{\sum^{y}_{k=0}{p_{k}}-\sum^{y}_{k=0}{p_{k-1}}}{1-0}\] \#\# Q2
+\#\#\# a) \textbf{Find the CDF:} F(i) = \(p(Y \le i)\) =
+\(\sum^{i}_{k=1}{\frac{1}{k(k+1)}}\) =
+\(\sum^{i}_{k=i}{\frac{1}{k}-\frac{1}{k+1}}\)
+
+\hypertarget{b}{%
+\subsubsection{b)}\label{b}}
+
+\textbf{Find G() for \(x \ge 0\)} \(G(i + 1)\) = \(1-\frac{1}{i+1}\)
+
+\hypertarget{c}{%
+\subsubsection{c)}\label{c}}
+
+\textbf{Find \(G^{-1}(x)\)} \(G(i+1) = 1-\frac{1}{i+1}\)
+\(y=1-\frac{1}{x}\) \(1-y=\frac{1}{x}\) \(x=\frac{1}{1-y} = G^{-1}(y)\)
+
+\hypertarget{d}{%
+\subsubsection{d)}\label{d}}
+
+Step 1. Generate X \textasciitilde Unif(0,1) Step 2. Let Y =
+{[}1/(1-X){]} Step 3. Return Y
+
+\hypertarget{q3}{%
+\subsection{Q3}\label{q3}}
+
+For the following integrals, please write out the pseudo code to
+calculate them with the Monte Carlo integration:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{2024}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{a}{%
+\subsubsection{a)}\label{a}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{q3a }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(X)\{}
+  \FunctionTok{exp}\NormalTok{(}\DecValTok{1}\NormalTok{)}\SpecialCharTok{\^{}}\NormalTok{(X}\SpecialCharTok{+}\NormalTok{X}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# integral[{-}2:2](e\^{}\{x+x\^{}2\})}
+\NormalTok{from }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{2}
+\NormalTok{to }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{total\_length }\OtherTok{\textless{}{-}}\NormalTok{ to}\SpecialCharTok{{-}}\NormalTok{from}
+\NormalTok{N }\OtherTok{\textless{}{-}}  \DecValTok{100000}
+\NormalTok{sim\_a }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(N)}\SpecialCharTok{*}\NormalTok{total\_length}\SpecialCharTok{+}\NormalTok{from}
+\NormalTok{sim\_y\_a }\OtherTok{\textless{}{-}} \FunctionTok{q3a}\NormalTok{(sim\_a)}
+
+\NormalTok{integral\_approx }\OtherTok{\textless{}{-}}\NormalTok{ (total\_length}\SpecialCharTok{/}\NormalTok{N)}\SpecialCharTok{*}\FunctionTok{sum}\NormalTok{(}\FunctionTok{q3a}\NormalTok{(sim\_a))}
+\FunctionTok{paste}\NormalTok{(}\StringTok{"The Monte Carlo integration is approximated too:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(integral\_approx,}\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The Monte Carlo integration is approximated too: 92.69"
+\end{verbatim}
+
+\hypertarget{b-1}{%
+\subsubsection{b)}\label{b-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{h }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
+    \FunctionTok{exp}\NormalTok{(}\DecValTok{1}\NormalTok{)}\SpecialCharTok{\^{}{-}}\NormalTok{(x}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{N}\OtherTok{=}\DecValTok{10000}
+\NormalTok{Z }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(N)}
+\NormalTok{negative }\OtherTok{\textless{}{-}}  \DecValTok{1{-}1}\SpecialCharTok{/}\NormalTok{Z}
+\NormalTok{positive }\OtherTok{\textless{}{-}}  \DecValTok{1}\SpecialCharTok{/}\NormalTok{Z}\DecValTok{{-}1}
+\NormalTok{int\_positive }\OtherTok{\textless{}{-}} \FunctionTok{h}\NormalTok{(positive)}\SpecialCharTok{*}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(Z}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{int\_negative }\OtherTok{\textless{}{-}} \FunctionTok{h}\NormalTok{(negative)}\SpecialCharTok{*}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(Z}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{new\_z }\OtherTok{\textless{}{-}}\NormalTok{ int\_negative }\SpecialCharTok{+}\NormalTok{ int\_positive}
+\FunctionTok{paste}\NormalTok{(}\StringTok{"The Monte Carlo integration is approximated too:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(new\_z),}\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The Monte Carlo integration is approximated too: 1.78"
+\end{verbatim}
+
+\textbf{How do we find out that we need to 1/Z\^{}2 to get the correct
+scale?}
+
+\hypertarget{c-1}{%
+\subsubsection{c)}\label{c-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{h }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x,y) \{}
+    \FunctionTok{exp}\NormalTok{(}\DecValTok{1}\NormalTok{)}\SpecialCharTok{\^{}}\NormalTok{(x}\SpecialCharTok{+}\NormalTok{y)}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{N}\OtherTok{=}\DecValTok{10000}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(N)}
+\NormalTok{Y }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(N)}
+
+\FunctionTok{paste}\NormalTok{(}\StringTok{"The Monte Carlo integration is approximated too:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(}\FunctionTok{h}\NormalTok{(X,Y)),}\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "The Monte Carlo integration is approximated too: 4.92"
+\end{verbatim}
+
+\hypertarget{d-1}{%
+\subsubsection{d)}\label{d-1}}
+
+Is it possible to see the code of how prof expected this to be solved?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{num\_iterations }\OtherTok{\textless{}{-}} \DecValTok{1000}
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\StringTok{"numeric"}\NormalTok{, }\AttributeTok{length =}\NormalTok{ num\_iterations)}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{num\_iterations) \{}
+\NormalTok{  U }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(N)}
+\NormalTok{  result }\OtherTok{\textless{}{-}} \FunctionTok{cov}\NormalTok{(U, }\FunctionTok{exp}\NormalTok{(}\DecValTok{1}\NormalTok{)}\SpecialCharTok{\^{}}\NormalTok{U)}
+\NormalTok{  results[i] }\OtherTok{\textless{}{-}}\NormalTok{ result}
+\NormalTok{\}}
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Mean of Means:"}\NormalTok{,}\FunctionTok{mean}\NormalTok{(results))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Mean of Means: 0.140906404247999"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{paste}\NormalTok{(}\StringTok{"SD of Means:"}\NormalTok{,}\FunctionTok{sd}\NormalTok{(results))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "SD of Means: 0.001288881455618"
+\end{verbatim}
+
+\end{document}

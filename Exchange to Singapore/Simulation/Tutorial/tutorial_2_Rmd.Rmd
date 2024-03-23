@@ -1,0 +1,197 @@
+---
+title: "Tutorial 2"
+author: "Laurits"
+date: "2024-02-15"
+output: html_document
+---
+# Question 1
+Consider a random variable X with the following probability mass function:
+$$p_{0} = 0.3,\ p_{1} = 0.2, \ p_{2} = 0.35, \ p_{3} = 0.15$$
+## We want to generate one random variable from this distribution
+### a) Please write the pseudo-code with the *sequential inversion algorithm*. What is the expected number of iterations?
+
+1. Generate U from $Unif[0, 1]$.
+2. Set $X = 0$, $P = p_{0}$.
+3. While $U > P$:
+	- X = X + 1
+	- P = P + $p_{x}$
+4. Return X
+
+*Expected number of iterations*:
+E[Y]+1
+
+E(iterations) = 1*(0.3)+2*(0.2)+3*(0.35)+4*(0.15) = 0.3+0.4+1.05+0.6 = 2.35
+
+
+### b. Please write the pseudo-code with the *ordered inversion algorithm*. What is the expected number of iterations?
+
+1. Generate U from $Unif[0, 1]$.
+2. Order $y_{k}$ in a way that $p_0 ≥ p_1 ≥ p_2 ≥ p_3 ≥ ...$ 
+3. Set $X = 0$, $P = p_{0}$.
+4. While $U > P$:
+	- X = X + 1
+	- P = P + $p_{X}$
+5. Return $y_{x}$
+
+*Expected number of iterations*:
+
+$\le$E[Y]+1
+
+E(iterations) = 1*(0.35)+2*(0.3)+3*(0.2)+4*(0.15) = 0.35+0.6+0.6+0.8 = 2.35
+
+
+c. Please write the pseudo-code with the table algorithm. What is the expected number of iterations?
+
+1. Set up a table A of length 100, i.e. $M = 100$.  
+2. For 0, define the first 30 elements as 0, the next 20 elements as 2, the following 35 entries as 2 and the final 15 elements as 3.  
+3. Generate $U ∼ Unif (0, 1)$.  
+4. Return $X = A(\lfloor100\cdot U\rfloor + 1)$.
+
+The expected number of iterations: 
+None, but the storage cost is M
+
+
+### d. Which method will you prefer to generate one random variable? What for n = 1000 random variable?
+For one random varialbe I would go for the sequential inversion algorithm.
+However, for 1000 random variables I would go for the table algorithm, as it is very fast once set up. That is if M isn't too large.
+
+### e. Say that we generate U = 0.236. What will be the output X by algorithms (a), (b) and (c)?
+a) 0.236 > $p_{0}$, so 0 would be returned
+b) 0.236 > $p_{0}$, that once reorderd would be 2.
+c) If the table is ordered as defined in the pseudo code, then 0.236*100 = 23.6, that floored would be entry 23, y = 0.
+
+# Question 2:
+## Develop a Rejection Algorithm for the generation of X, which has probability mass function:
+$$p_{i} = \frac{c_{1}}{2i-1} - \frac{c_{1}}{2i}$$
+where $c1 = \frac{1}{log (2)}$ is a normalising constant.
+
+Consider $$q_{i} = \frac{1}{i(i+1)} = \frac{1}{i}-\frac{1}{(i+1)}$$ in class as the candidate distribution
+
+
+### A) Derive c and implement the algorithm to generate 10000 samples
+
+We know that:
+$$c \geq \frac{p(i)}{q(i)}$$
+$$c \geq max_{i} \frac{p_i}{q_i}$$
+
+$$c \geq \frac
+{\frac{c_{1}}{2i-1} - \frac{c_{1}}{2i}}
+{\frac{1}{i}-\frac{1}{(i+1)}} 
+= \frac
+{\frac{c_{1}}{(2i-1)(2i)}}
+{\frac{1}{i(i+1)}} 
+= \frac
+{c_{1}i(i+1)}
+{(2i-1)(2i)}
+= \frac
+{c_{1}(i+1)}
+{2(2i-1)} 
+= c_{1}
+\frac
+{(i+1)}
+{2(2i-1)} $$ 
+We need  to find the max value of the equation, so we check what happens when i increases:
+As i increases the fraction $\frac{(i+1)}{2(2i-1)}$ decreases towards $\frac{1}{4}$, when i = 1 the fraction reaches maximum = $\frac{(1+1)}{2(2-1)}=\frac{2}{2}=1$
+
+
+So $\max_{i}(c_{1} \frac{(i+1)}{2(2i-1)}) = c_{1}\cdot1= c_1$, and we can conclude that $c \geq c_{1}$ or  $c \geq  \frac{1}{log (2)}$
+Where the computationally most efficient c is just 1/log(2)
+
+**IMPLEMENT ALGORITHM**
+```{r}
+set.seed(125)
+c <-  1/log(2)
+N <- 10000*c #Estimated average rejection correction
+U <- runif(N)
+Y <- floor(1/(1- runif(N)))
+p_i <- function(x){(1/log(2))/(2*x-1)-((1/log(2))/(2*x))}
+q_i <- function(x){1/(x*(x+1))}
+
+
+
+
+not_rejected <- U <= p_i(Y)/(q_i(Y)*c)
+Y <- ifelse(not_rejected, yes = U, NA) # Correcting the condition for acceptance
+Y <- na.omit(Y)
+hist(Y, breaks =  100)
+```
+
+
+
+
+b. From these samples, estimate your acceptance rate. Does it agree with your theoretical derivation?
+
+```{r}
+Rejection_rate <- length(Y)/N
+Theoretical_deriviation <- 1/c
+
+
+print(paste("Rejection_rate",Rejection_rate))
+print(paste("Theoretical_deriviation",Theoretical_deriviation))
+```
+
+# Question 3
+
+Consider $X ∼ \frac{1}{5}q^{(1)} + \frac{2}{5}q^{(2)} + \frac{2}{5}q^{(3)}$, where:
+
+$$\begin{cases}
+q^{(1)}:q_{1}^{(1)} = 0.3, q_{2}^{(1)}=0.2, q_{3}^{(1)} = 0.5; \\
+q^{(2)}:q_{1}^{(2)} = 0.3, q_{5}^{(2)}=0.7 \\
+q^{(3)}:q_{1}^{(3)} = 0.25, q_{2}^{(3)}=0.25, q_{4}^{(3)} = 0.25, q_{5}^{(3)} = 0.25;
+\end{cases}$$
+
+## a) Find P(X = 5)
+$$P(X = 5) = \frac{1}{5}*0 + \frac{2}{5}*0.7 + \frac{2}{5}*0.25 = 0.38$$
+
+## b) Find the probability mass function of X
+$$1 = \frac{1}{5}*0.3 + \frac{2}{5}*0.3 + \frac{2}{5}*0.25 = 0.28$$
+$$2 = \frac{1}{5}*0.2 + \frac{2}{5}*0 + \frac{2}{5}*0.25 = 0.14$$
+
+$$3 = \frac{1}{5}*0.5 + \frac{2}{5}*0 + \frac{2}{5}*0 = 0.1$$
+$$4 = \frac{1}{5}*0 + \frac{2}{5}*0 + \frac{2}{5}*0.25 = 0.1$$
+$$5 = \frac{1}{5}*0 + \frac{2}{5}*0.7 + \frac{2}{5}*0.25 = 0.38$$
+## c) Find the probability mass function of X
+Create table with 100 entrances:
+{0:27 = 1
+28:41 = 2
+42:51 = 3
+52:61 = 4
+62:99 = 5}
+Simulate U = $\lfloor 100*unif(0,1) \rfloor$ 
+Find corresponding value to U in table
+
+
+## d) Give the pseudo-code to generate X by the alias method
+* Generate U ~ Unif(0,1) and V ~ Unif(0,1)
+* If U < 0.2
+	* If V < 0.3, X = 1
+	* elseif < 0.5, X =2
+	* else X = 3
+* elseif U < 0.6
+	* V < 0.3, X = 1
+	* else X = 5
+* else:
+	* if V < 0.5, X =$\lceil 4*V\rceil$
+	* else X = $\lceil 4*V\rceil+1$
+
+# 4 Cant make work
+```{r}
+inverse_function <- function(x){
+  sqrt(6/(x*pi^2))
+}
+
+6/(pi^2*runif(N)^2)
+inverse_Y <- inverse_function(1/(1-runif(N)))
+```
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1 @@
+[|Support Vector Classifier is **an extension of the Maximal Margin Classifier**. It is less sensitive to individual data. Since it allows certain data to be misclassified, it's also known as the “Soft Margin Classifier”. It creates a budget under which the misclassification allowance is granted.](https://www.analyticsvidhya.com/blog/2021/05/support-vector-machines/)

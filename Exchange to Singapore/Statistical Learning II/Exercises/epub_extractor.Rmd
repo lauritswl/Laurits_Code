@@ -1,0 +1,18 @@
+---
+title: "Chapter 7 exercise"
+author: "Laurits"
+date: "2024-02-01"
+output: html_document
+---
+
+```{r}
+install.packages("devtools")
+devtools::install_github("aephidayatuloh/rpubs")
+```
+
+```{r}
+library(rpubs)
+article <- "https://rpubs.com/aephidayatuloh/sendgmail"
+rpubs_code(url = article, path = "myfolder/sendgmail.R", output = FALSE)
+```
+

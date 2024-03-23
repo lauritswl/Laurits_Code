@@ -18,3 +18,7 @@ Assignment, CSV's and Markdowns used in methods 3
 I'm learning python through a online course, follow along :)
 Actuall projects will be stored in the projects repotory
 See: [[00 Index]]
+
+
+### [[Overview of classes|NUS notes from Singapore]]
+I save my statistical and coding notes from classes

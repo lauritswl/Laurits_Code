@@ -1,0 +1,583 @@
+---
+title: "Assignment_1_Simulation"
+author: "Laurits"
+date: "2024-02-24"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+set.seed(1000)
+```
+
+# Q1
+
+Two dice are to be continually rolled until all the possible outcomes 2,
+3, · · · , 12 have occurred at least once. We are interested in the
+number of dice rolls till then, denoted as X.
+
+## a)
+
+When both dice are fair, i.e. pk = 1/6 for all k, construct a simulation
+study to estimate E[X].
+
+```{r}
+n <- 1000
+
+
+roll_a_dice <- function() {return(floor(6*runif(1)))}
+roll_two_dice <- function() {return(roll_a_dice() + roll_a_dice())}
+
+simulate_rolls <- function() {
+  rolls <- c()
+  while (length(unique(rolls)) < 11){
+    rolls <- c(rolls, roll_two_dice())
+  }
+  return(length(rolls))
+}
+
+```
+
+```{r}
+outputs <- numeric(n)
+for (i in 1:n) {
+  outputs[i] <- simulate_rolls()
+}
+```
+
+```{r}
+plot(hist(outputs,breaks = 100))
+```
+
+```{r}
+print(paste0("Mean: ", round(mean(outputs), 2)))
+print(paste0("Standard Deviation: ", round(sd(outputs), 2)))
+```
+
+## b)
+
+When p = (1/12, 1/12, 1/12, 1/4, 1/4, 1/4) for both dice, construct a
+simulation study to estimate E[X].
+
+```{r}
+n <- 1000
+roll_a_dice <- function() {
+  dist_case <-runif(1)
+  generated_number <-  runif(1)
+  if (dist_case > 0.25){
+    floor(3*generated_number)
+  }
+  else{
+    floor(3*generated_number)+3
+  }
+}
+roll_two_dice <- function() {return(roll_a_dice() + roll_a_dice())}
+
+simulate_rolls <- function() {
+  rolls <- c()
+  while (length(unique(rolls)) < 11){
+    rolls <- c(rolls, roll_two_dice())
+  }
+  return(length(rolls))
+}
+
+```
+
+```{r}
+outputs <- numeric(n)
+for (i in 1:n) {
+  outputs[i] <- simulate_rolls()
+}
+```
+
+```{r}
+plot(hist(outputs,breaks = 100))
+```
+
+```{r}
+print(paste0("Mean: ", round(mean(outputs), 2)))
+print(paste0("Standard Deviation: ", round(sd(outputs), 2)))
+```
+
+## c)
+
+**Compare and interpret the results in parts (a) and (b).** For question
+b the dice is skewed towards rolling high numbers, and therefore needs
+more rolls to roll all outcomes of the distribution. When we roll two
+die, we need two die to roll a less likely outcome. We therefore expect
+our b simulation to roll all possible more slowly. This follows the
+output from the code, when the dice are skewed the mean iterations to
+generate all combinations increase from 61.9 to 173.08.
+
+# Q2
+
+Consider the distribution:
+$$P(X = j) = (1/2)^{j+1}+(1/2)2^{j-1}/3^{j}, \ j = 1, 2, ...$$ Generate
+1000 samples and estimate E[X] and Var(X) according to your samples.
+
+**ANSWER:** The function consists of two functions: \$ (1/2)\^{j+1}\$
+and $(1/2)2^{j-1}/3^{j}$ As both functions quickly goes towards 0 as j
+increases, this is a good case for using the sequential inversion
+method:
+
+1.  Generate 1000 samples from Unif[0,1], and store as a vector X =
+    $(U_1, U_2, ... , U_{1000})$
+2.  Set j = 0, P = 0
+3.  For all X, While U \> P j = j + 1 P = P + p(j)
+4.  Return j
+
+### Define the sequential inversion function
+
+```{r}
+sequential_inversion_algorithm <- function(U){
+  Not_Done <- TRUE
+  last_cum <- 0
+  j <- 1
+  
+  while (TRUE){
+    this_prob <- (1/2)^(j+1)+(1/2)*(2^(j-1))/3^j # CHANGE FUNCTION HERE FOR REUSE
+    last_cum <- last_cum+this_prob
+    if (last_cum >= U){
+      break
+    } # Stop while loop if value found
+    if (j == 10000){ 
+      j <- NA
+      break
+    }# Safety switch for computation.
+    j <- j + 1 #Implement iterations in loop
+  } 
+  return(j-1)
+}
+
+
+```
+
+```{r}
+# Step 1: Generate vector of U(0,1)
+N <- 1000
+X <- runif(N, min = 0, max = 1)
+
+# Step 2: Map the inversion algorithm onto the vector of generated values
+library(purrr)
+X <- map_vec(X, sequential_inversion_algorithm)
+table(X)/N
+
+# Step 3: Return E[X] and Var(X)
+paste0("E[X] = ", mean(X))
+paste0("Var[X] = ", var(X))
+```
+
+# Q3
+
+The frequency of heavy rains in one week follows a Poisson distribution
+with parameter λ. According to the past years, the rate λ ∼ Unif{1, 2,
+3, 4, 5, 6}.\
+It is the same during one year, but may change over years. In this year,
+in the past 4 weeks, we have observed 4, 6, 5, 3. We want to give a
+proper estimate of λ. Let X denote the frequency of heavy rains in one
+week. Please answer the following questions.
+
+## a)
+
+Find the joint probability of the data points 4, 6, 5, 3 when λ = j.
+**Answer:** A poisson distribution is defined as:
+$$p_i=P(X = i)=e^{-\lambda } {\frac {\lambda ^{i}}{i!}}, \ \ i = 0, 1, 2, ...$$
+
+For a poisson distribution, $p_{i+1}$ can be denoted as:
+$$p_{i+1}=P(X=i)=\frac{\lambda}{i+1}p_i, \ i \geq 0$$
+
+The itterations has the following structure:
+
+```{r}
+poisson_iteration <- function(i, lambda){
+  if (i > 0){
+    probability <- lambda/(i)*poisson_iteration(i = i-1, lambda = lambda)
+    return(probability)
+    } else {
+   probability <- exp(-lambda)*(lambda^i)/factorial(i)
+   return(probability)
+  }}
+
+```
+
+```{r}
+p_lambda_given_data <- c()
+
+for (lambda in seq(1,6)){
+  joint_prob <- prod(map_vec(seq(3,6), function(i){poisson_iteration(i = i,lambda = lambda)}))
+  p_lambda_given_data <- c(p_lambda_given_data, joint_prob)
+  print(paste0("For lambda = ", lambda, " the following joint probability exists for observation [4, 6, 5 ,3]=", round(joint_prob,10)))
+  }
+
+```
+
+## b)
+
+With the observed data points 4, 6, 5, 3, please find the conditional
+distribution of λ, p(λ\|data), subject to a constant. (Hint: p(λ\|data)
+∝ p(data\|λ)p(λ), where p(data\|λ) is calculated in part (a) and p(λ) is
+uniform on {1, 2, 3, 4, 5, 6}.
+
+```{r}
+df_poisson <- data.frame(
+  "lambda"= seq(1,6),
+  "lambda_prob" = rep(1/6, 6),
+  "data_prob" = p_lambda_given_data)
+df_poisson["cond_prob"] <- df_poisson["lambda_prob"]*df_poisson["data_prob"]
+df_poisson
+```
+
+Conditional probability:
+
+```{r}
+print((df_poisson["cond_prob"][[1]]))
+
+```
+
+Conditional probability distribution, scaled to have a sum of 1:
+
+```{r}
+df_poisson["Scaled_cond_prob"] <- df_poisson["cond_prob"]/sum(df_poisson["cond_prob"]) # When scaling we might as well use data_prob as the lambda is uniformly distributed.
+
+
+library(tidyverse)
+df_poisson %>% 
+  ggplot(aes(x=lambda, y=Scaled_cond_prob, fill = Scaled_cond_prob)) +
+  geom_bar(stat = "identity")+
+  scale_fill_gradient(low = "lightblue", high = "lightcoral")+
+   labs(title = "Conditional probability distribution of lambda",
+       x = "Lambda",
+       y = "Probability")
+
+
+```
+
+## c)
+
+With the previous results, write a pseudo-code for p(λ\|data). (Hint:
+one way is to use the rejection algorithm for the kernel function. You
+can also identify the exact probabilities and use inverse method or
+table method.)
+
+**Answer** For this i would use the ordered inversion method, to a avoid
+iterations of sampling from 1 and 2 first, as these have very low
+probabilities.
+
+1.  Generate 1000 samples from Unif[0,1], and store as a vector X =
+    $(U_1, U_2, ... , U_{1000})$
+2.  Order the $p$ so that the highest probability is first, and then
+    decreases as i increases.
+3.  Set i = 1, P = p(1)
+4.  For all X, While $U > P$ then: i = i + 1, and P = P + p(i)
+5.  Return i'th value of p in vector of Y
+
+## d)
+
+Generate 1000 samples according to the algorithm in Part (c). What is
+the empirical distribution of λ based on the generated samples?
+
+```{r}
+# 1. Generate samples:
+U <- runif(n = 1000, min = 0, max = 1)
+
+# 2. Order p
+
+df_poisson <- df_poisson %>% 
+  arrange(desc(Scaled_cond_prob))
+
+
+
+
+# 3. Set i and P
+i <- 1
+P <- df_poisson$Scaled_cond_prob[i]
+
+Y <- map_vec(.x = U, .f = function(U){
+  while (P < U){
+    i <- i + 1
+    P <- P + df_poisson$Scaled_cond_prob[i]
+  }
+  return(df_poisson$lambda[i])
+})
+
+
+table(Y)/1000
+```
+
+## e)
+
+Based on the results in (d), predict the number of heavy rains in next
+week, i.e. the distribution of the number of heavy rains when λ ∼
+p(λ\|data). Here, we only need numerical presentation of the
+distribution, i.e. the histogram of your simulated samples.
+
+**Answer:** The frequency of heavy rains in one week follows a Poisson
+distribution with parameter λ. This means that for each sample i need to
+generate the lambda according to λ ∼ p(λ\|data), and then generate the
+amount of rain as a sample from the poisson distribution derived from
+the generated lambda. The Lambda Values are generated and saved in
+vector Y from section d. So we just need to sample.
+
+PSEUDO CODE FOR GENERATING FROM POISSON: \
+1. Generate random number U \
+2. i = 0, p = $e^{-\lambda}$, Cp = p \
+3. If U \< Cp , set X = i, and stop \
+4. $p =\frac{\lambda}{i+1}p$, Cp = Cp + p, i = i+1. \
+5. Go to step 3.
+
+I get a stack usage error when using previous poisson function, so i
+retwrite it as a while loop instead of an recursion, and save the
+cummulative prob inside of loop.
+
+```{r}
+Generate_Poisson <- function(lambda){
+  U <- runif(1)
+  i <- 0
+  p = exp(-lambda)
+  Cp <-  p
+  while (U > Cp){
+    p <- p*lambda/(i+1)
+    i <- i+1
+    Cp <- Cp + p
+  }
+  return(i)
+}
+```
+
+```{r}
+Heavy_Rains <- map_vec(.x = Y, Generate_Poisson)
+table(Heavy_Rains)
+```
+
+# Q4
+
+Suppose that g is an easy probability density function to generate from,
+and h is a non-negative function. Take a close look at the following algorithm pseudo-code:
+
+Step 1. Generate Y ∼ g. \
+Step 2. Generate E ∼ Exp(1) in the way that E = −log(U), U ∼ Unif (0,1). \
+Step 3. If E ≥ h(Y), set X = Y . Otherwise go to Step 1. \
+Step 4. Return X. 
+
+This is a rejection algorithm and we want to find the density function of the generated samples.
+
+## a)
+
+Note that E ∼ Exp(1). What is the probability that P(E ≤ t) for any constant $t \geq 0$?
+
+**Answer:** 
+E follows an exponential distribution with lambda value of 1.
+The probability density function of E is therefore as follows:
+f(E) = $e^{-1E}, \ E \geq 0$
+
+To find $P(E \leq t)$ = $\int_0^t{f(E)\ dE} = \int_0^t{e^{-E} \ dE} = F(t)-F(0)= -e^{-t}-(-e^{-0})=1-e^{-t}$
+
+The CDF of the exponential function is therefore $P(E \leq t)=1-e^{-t}$
+
+## b)
+
+Given Y = x, what is the probability that Y will be accepted?
+
+**Answer**
+
+We have probability $P(E \leq t)=1-e^{-t}$, and by that follows $P(E \leq h(Y))=1-e^{-h(Y)}$
+For Y to be accepted $E \geq h(Y)$. We therefore substitute t with $h(Y)$, that in this case is $h(x)$.
+
+So we can easily find that
+$P(\text{x is accepted given Y = x}) = P(E \geq h(x)) = 1 - P(E \leq h(x))$. This means that $P(E \geq h(x)) = 1-(1-e^{-h(x)})=-e^{-h(x)}$.
+
+And find that the probability that Y is accepted is: 
+$$P(\text{x is accepted given Y = x}) = -e^{-h(x)}$$
+
+## c)
+
+What is the joint probability that P(Y ≤ x, Y is accepted)? The integral form is needed here.
+
+**Answer**
+
+$$P(Y \leq x, \text{Y is accepted}) = P(Y \leq x) \cdot P(\text{Y is accepted})$$
+Firstly: 
+$$P(Y \leq x) = P(g \leq x) = \int_x^{\infty} g(U) \ dU$$
+
+Second:
+$$ P(\text{Y is accepted}) = P({E \geq h(Y)}) = \int_{h(Y)}^{\infty}{-e^{-E} \ dE}$$
+
+Thereby:
+$$P(Y \leq x, \text{Y is accepted}) = \int_x^{\infty} g(U) \ dU \int_{h(Y)}^{\infty}{-e^{-E} \ dE}$$
+
+
+
+## d & e)
+Coudn't find an answer
+
+
+
+
+# Q5
+Consider the random variable having density:
+$$f(x) = x^4 + 2x^2 - 2x + 17/15, \ 0<x<1$$
+
+## a)
+Give an algorithm to generate it by the rejection method. Discuss the efficiency of your algorithm.
+
+**Answer**:
+I pick the exponential function as my candidate function g(x) as it is easy to generate and follows the f(x) nicely. That is,
+$$g(x) = e^x, \ 0 < x < 1$$
+The interval 0 < x < 1 is transformed into 1 < y < 2.718282
+
+
+To determine the smallest constant c such that f(x)/g(x) $\leq$ c, we use calculus to determine the maximum value of
+$$\frac{f(x)}{g(x)} = ({x^{4}+2x^{2}-2x+\frac{17}{15}})e^{-x} \leq c$$
+This can be found by investigating the derivative of this function. Or by plotting it and investigating it visually.
+Visually it can be seen that $\frac{f(x)}{g(x)}$ is at its highest at 0, when bound between 0 and 1. It can thereby be found that c = 17/15
+```{r}
+fx <- function(x){x^4+2*x^2-2*x+17/15}
+gx <- function(x){exp(x)}
+
+C <- fx(0)/gx(0) 
+print(paste0("C = ", round(C, digits = 2)))
+```
+
+
+
+1. Generate Y having density g ~ log($U_1$), $U_1 \sim unif(1,e)$
+2. Generate $U_2 \sim unif(0,1)$
+3. If $U_2 \leq \frac{15}{17}\frac{f(Y)}{g(Y)}$, Set X = Y, Otherwise return to step 1.
+
+This algorithm should work efficiently, it only needs to generate two numbers, and as C is pretty close to 1, and the probabilities somewhat follows each other, most simulations should be accepted.
+
+
+
+## b)
+Give an algorithm to generate it by the compositional method. Discuss the efficiency of your algorithm.
+
+**Answer:**
+Decompose the function into two functions, preferably easier to generate:
+$$f(x) = {x^{4}+2x^{2}-2x+\frac{17}{15}} \leftrightarrow \alpha f_1(x) + (1-\alpha)f_2(x) = \alpha(x-1)^2 + (1-\alpha)(x^4 + x^2 +\frac{2}{15})$$
+
+$$f_2(x) = \alpha f_{2.1}(x) + (1-\alpha)f_{2.2}(x) = \alpha(x^4 + x^2)  + (1-\alpha)(\frac{2}{15})$$
+
+to find the alpha value of the two functions, we just need to integrate one of them:
+```{r}
+print("alpha is (approximated) to for (x-1)^2 and rest of the function:")
+alpha_1 <- integrate(function(x){(x-1)^2},lower = 0,upper = 1)
+print(alpha_1)
+
+
+
+```
+
+The remaining function is split into two composition functions with alpha:
+```{r}
+print("alpha is (approximated) to for x^4+x^2 and and uniform distribution 2/15:")
+alpha_2 <- integrate(function(x){x^4+x^2},lower = 0,upper = 1)
+alpha_2_adjusted <- alpha_2$value/(1-alpha_1$value)
+print(alpha_2_adjusted)
+```
+
+
+
+
+
+When restricted in the space 0 < x < 1, the inverse can be defined as.
+$$f_1^{-1}(Y) = -\sqrt{Y}+1, \ \text{when: } 0 < Y < 1$$
+and
+$$f_2^{-1}(Y) = \sqrt{\frac{-1+\sqrt{4\cdot Y+ 1}}{30}}, \ \text{when: } 0 < Y < 2$$
+and for the inverse
+
+$$f_3^{-1}= Y, \ \text{when: }0 < Y < 1$$
+
+Suppose that f(1) and f(2) are easy to sample from
+1. Generate U1
+2. Generate U2
+3. If $U1 > \frac{2}{3}$ sample from $f_1^{-1}(U2)$ distribution else sample from $f_2^{-1}(U2*2+0.13)$ distribution.
+
+
+## c)
+Generate 10000 random variables by both algorithms. Compare the histograms. Are they similar?
+### First we generate:
+
+```{r - Global Setting}
+set.seed(123)
+N <- 10000
+```
+
+1. Generate Y having density exp(1) ~ ln($U_1$), $U_1 \sim  unif(0,1)$
+2. Generate $U_2 \sim unif(0,1)$
+3. If $U_2 > \frac{15}{17}\frac{f(Y)}{g(Y)}$, Set X = Y, Otherwise return to step 1.
+
+### Rejection Method Generation
+```{r}
+#C <- 17/15
+U_1 <- runif(N*2,0,1)
+
+Y <- log((U_1*(exp(1)-exp(0))+exp(0))) #log(unif(1, e))
+U_2 <- runif(N*2,0,1)
+f_over_g_x <- function(x){
+  (x^(4)+2*x^(2)-2*x+((17)/(15)))/exp(x) #f(Y)/g()
+}
+X_rejection <- ifelse(test = U_2 <= f_over_g_x(Y)/C, Y, NA)
+X_rejection <- na.omit(X_rejection)
+hist(X_rejection, breaks = 50)
+```
+
+
+### Compositional method
+```{r}
+set.seed(1234)
+
+N <- 10000
+# Generate variables
+U_1 <- runif(N,0,1)
+U_2 <- runif(N,0,1)
+Find_Y_Interval <- function(Y, from, to){(Y*(to-from))+from}
+invF1 <- function(Y){
+  Y <- Find_Y_Interval(Y, 0, 1)
+  -sqrt(Y)+1}
+
+invF2 <- function(Y){
+  Y <- Find_Y_Interval(Y, 0, 2)
+  sqrt((-1+sqrt(4*Y+1))/2)}
+
+hist(invF1(U_2),breaks = 50)
+hist(invF2(U_2),breaks = 50)
+
+
+X_compositional <- ifelse(U_1 < alpha_1$value,
+                          yes = invF1(U_2),
+                          no = ifelse(U_1 < alpha_1$value+alpha_2$value,
+                                      yes = invF2(U_2),
+                                      no = U_2))
+
+```
+```{r}
+hist(X_compositional, breaks = 50)
+```
+
+
+### Compare the histograms
+It seems something went slightly wrong in the generation of 'Histogram of X_compositional', that is the compositional approach. The increase in probability caused by F1 increasing towards 0 doesn't seem to be captured by algorithm.
+Please let me know what went wrong if you can spot it. I know it isn't directly the compositional algorithm desribed in the textbook, but the textbook algortihm is only defined for discrete variables, and there is no online sources on "simulating with the compositional approach".
+
+
+
+## d)
+Compare the time you have used for two algorithms in part (c).
+
+**Answer**
+The time to figure our a disfunctional compositional approach was exponentionally more time consuming to set up. Even with optimising the compositional approach to the smallest c.
+
+
+When accounting for the system time scale:
+My compositional approach took 0.14 seconds, as it needed to evaluate to ifelse statements, and generate two variables just like the rejection approach.
+My rejection approach took 0.06 seconds, but had a rejection constant of around 0.5, so it needed to generate 20000 variables to have 10000 effective samples.
+
+It seems the rejection algorithm worked best for this function. But im also fairly certain I used the composition approach wrongly. It would be greatly appreciated if we could get a source explaining the composition approach more than chapter 4.5 in the simulation by sheldon ross.
+
+
+
+
+
+

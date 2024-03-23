@@ -8,43 +8,18 @@
         "type": "tabs",
         "children": [
           {
-            "id": "e4a7727abf9e1b50",
+            "id": "21bcc6bb55964537",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "R/Statistical Rethinking/README.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "1609b4c0d2953a09",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Graphical causal models.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "aa663b76b3d02a1a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "README.md",
+                "file": "Exchange to Singapore/Simulation/Discrete Random Variables.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -89,12 +64,20 @@
               "type": "starred",
               "state": {}
             }
+          },
+          {
+            "id": "cc796580c62841ef",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "d05bc1fc40053743",
@@ -110,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "Exchange to Singapore/Simulation/Discrete Random Variables.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "Exchange to Singapore/Simulation/Discrete Random Variables.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +133,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
+                "file": "Exchange to Singapore/Simulation/Discrete Random Variables.md"
               }
             }
           }
@@ -171,50 +154,53 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "aa663b76b3d02a1a",
+  "active": "21bcc6bb55964537",
   "lastOpenFiles": [
-    "Python/00 Index.md",
-    "Python/1-10/Conditional Statements.md",
+    "Exchange to Singapore/Simulation/Inversion methods.md",
+    "Exchange to Singapore/Simulation/Assignment/Assignment_1_simulation.Rmd",
+    "Exchange to Singapore/Simulation/Assignment",
+    "Exchange to Singapore/Simulation/New folder",
+    "Exchange to Singapore/Simulation/Tutorial/Tutorial_3_Rmd.knit.md",
+    "Exchange to Singapore/Simulation/Tutorial/Writing latex.md",
+    "Exchange to Singapore/Simulation/Tutorial/Tutorial_3_Rmd.html",
+    "Untitled.md",
+    "Exchange to Singapore/Simulation/Ordered Inversion Algorithm 1.md",
+    "Exchange to Singapore/Statistical Learning II/Overview of Statistical Learning II.md",
+    "Exchange to Singapore/Simulation/Rejection Methods.md",
+    "Exchange to Singapore/Simulation/Sequential Inversion Algorithm 1.md",
+    "Exchange to Singapore/Simulation/The Bisection Method.md",
+    "Exchange to Singapore/Simulation/Table Method.md",
+    "Exchange to Singapore/Simulation/Tutorial/Tutorial1.pdf",
+    "Exchange to Singapore/Linear Algebra/Tutorial 4.md",
+    "Exchange to Singapore/Simulation/Tutorial/Tutorial_3_Rmd.Rmd",
+    "Exchange to Singapore/Statistical Learning II/Statistical Learning/Support Vector Machines.md",
+    "Exchange to Singapore/Statistical Learning II/Max-margin support vector classifier.md",
+    "Exchange to Singapore/Simulation/Monte Carlo methods.md",
+    "Exchange to Singapore/AI/Assignment 3/Data/student-merge.R",
+    "Exchange to Singapore/AI/Assignment 3/Data/student-mat.csv",
+    "Exchange to Singapore/AI/Assignment 3/Data/student.txt",
+    "Exchange to Singapore/AI/Assignment 3/Data/student-por.csv",
+    "Exchange to Singapore/Simulation/Overview of Simulation.md",
+    "Exchange to Singapore/Simulation/Importance Sampling.md",
+    "Exchange to Singapore/AI/IT1244 Overview.md",
+    "Exchange to Singapore/Linear Algebra/Quiz 2 - Linear Algebra.md",
+    "Exchange to Singapore/Simulation/Tutorial/tutorial_2_Rmd.knit.md",
+    "Exchange to Singapore/Simulation/Tutorial/tutorial_2_Rmd_files/figure-html/unnamed-chunk-1-1.png",
+    "Exchange to Singapore/Linear Algebra/Homework 1 - Linear Algebra.md",
+    "Exchange to Singapore/Statistical Learning II/Untitled.md",
+    "Images/Bisection_method_from_wiki.png",
+    "Images/Probabilities_for _Sequential_Inversion.png",
+    "Exchange to Singapore/Simulation/Tutorial/tutorial_1_Rmd.knit.md",
+    "Exchange to Singapore/Simulation/Uniform variable generation.md",
+    "Exchange to Singapore/Simulation/Discrete Random Variables.md",
+    "Exchange to Singapore/Statistical Learning II/Supervised Learning.md",
     "Images/nested if_else2.png",
     "Images/Nested if_else.png",
     "Images/Multiple if statements.png",
     "Images/If_else.png",
     "Images/elif_flow.png",
-    "Images/Python+Syntax+Cheat+Sheet+Booklet.pdf",
-    "Python/21-30/Files, Directories and Paths.md",
-    "Python/21-30",
-    "Python/21-22",
-    "Python/New folder",
-    "Python/11-20/Files, Directories and Paths.md",
-    "Python/11-20/Event Listeners.md",
-    "Python/11-20/Higher Order Functions.md",
-    "Python/11-20/Tuples.md",
-    "Python/11-20/Object Oriented Programming (OOP).md",
-    "Python/11-20/Importing modules.md",
-    "Python/11-20/Creating your own class.md",
-    "Python/11-20/Constructor.md",
-    "Python/11-20",
-    "README.md",
-    "Python/1-10",
-    "Graphical causal models.md",
-    "Python/1-10/Docstrings.md",
-    "Python/1-10/Dictionary.md",
-    "Python/1-10/Defining a function.md",
-    "Python/1-10/Data Types.md",
-    "Python/1-10/Used functions.md",
-    "Python/1-10/Random Module.md",
-    "Python/1-10/Print and syntax.md",
-    "Python/1-10/Modules.md",
-    "Python/1-10/Mathematical Operations.md",
-    "Python/1-10/Loop.md",
-    "Python/1-10/Logical Operators.md",
-    "Python/1-10/List.md",
-    "Python/1-10/Karel the Robot.md",
     "Images/Bayes_theorem_image.png",
     "Untitled.canvas",
-    "Images/Hypotheses are not models.png",
-    "Images/How_to_draw_the_bayesian_owl.png",
-    "Images/How_to_draw_an_owl.png",
-    "Images/Following_with_youtube.png"
+    "Images/Hypotheses are not models.png"
   ]
 }
